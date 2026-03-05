@@ -119,13 +119,13 @@ document.addEventListener('DOMContentLoaded', () => {
                   <textarea id="message" name="message" placeholder="Special requests, dietary requirements, celebrations..."></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary" style="width: 100%; gap: 0.5rem;">
-                  ${ICONS.whatsapp} Send via WhatsApp
+                  ${ICONS.line} Send via LINE
                 </button>
               </form>
 
               <div class="form-success" id="form-success">
-                <h3>Redirecting to WhatsApp...</h3>
-                <p style="color: var(--color-text-muted);">Your reservation request is being sent via WhatsApp. If it didn't open automatically, <a href="#" id="whatsapp-link" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); font-weight: 700;">click here</a>.</p>
+                <h3>Redirecting to LINE...</h3>
+                <p style="color: var(--color-text-muted);">Your reservation request is being sent via LINE. If it didn't open automatically, <a href="#" id="line-link" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); font-weight: 700;">click here</a>.</p>
                 <button class="btn btn-outline" id="form-reset" style="margin-top: 1rem; color: var(--color-primary); border-color: var(--color-primary);">Make Another Reservation</button>
               </div>
             </div>
@@ -157,13 +157,7 @@ function initForm(): void {
   const form = document.getElementById('reservation-form') as HTMLFormElement;
   const success = document.getElementById('form-success');
   const resetBtn = document.getElementById('form-reset');
-  const whatsappLink = document.getElementById('whatsapp-link') as HTMLAnchorElement;
-
-  // Map location IDs to WhatsApp numbers (without + prefix, as wa.me requires)
-  const locationPhones: Record<string, string> = {};
-  config.locations.forEach(loc => {
-    locationPhones[loc.id] = loc.phone.replace('+', '');
-  });
+  const lineLink = document.getElementById('line-link') as HTMLAnchorElement;
 
   if (form && success) {
     form.addEventListener('submit', (e) => {
@@ -185,32 +179,32 @@ function initForm(): void {
       const message = data.get('message') as string;
 
       const locationLabel = config.locations.find(l => l.id === locationId)?.label || locationId;
-      const whatsappNumber = locationPhones[locationId] || locationPhones[config.locations[0].id];
 
       const lines = [
-        `*Reservation Request — BUTSABA Wine & Cafe*`,
+        `Reservation Request — BUTSABA Wine & Cafe`,
         ``,
-        `*Name:* ${name}`,
-        `*Email:* ${email}`,
-        phone ? `*Phone:* ${phone}` : '',
-        `*Location:* ${locationLabel}`,
-        `*Date:* ${date}`,
-        `*Time:* ${time}`,
-        `*Party Size:* ${partySize}`,
-        message ? `*Message:* ${message}` : '',
+        `Name: ${name}`,
+        `Email: ${email}`,
+        phone ? `Phone: ${phone}` : '',
+        `Location: ${locationLabel}`,
+        `Date: ${date}`,
+        `Time: ${time}`,
+        `Party Size: ${partySize}`,
+        message ? `Message: ${message}` : '',
       ].filter(Boolean).join('\n');
 
-      const waUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(lines)}`;
+      // LINE share URL — works on mobile/desktop, opens LINE with pre-filled text
+      const lineUrl = `https://line.me/R/share?text=${encodeURIComponent(lines)}`;
 
       // Update fallback link
-      if (whatsappLink) {
-        whatsappLink.href = waUrl;
+      if (lineLink) {
+        lineLink.href = lineUrl;
       }
 
-      // Show success and open WhatsApp
+      // Show success and open LINE
       form.style.display = 'none';
       success.classList.add('show');
-      window.open(waUrl, '_blank');
+      window.open(lineUrl, '_blank');
     });
   }
 

@@ -48,6 +48,18 @@ export function initHeader(): void {
       link.classList.add('active');
     }
   });
+
+  // Highlight active mobile nav item
+  document.querySelectorAll('.mobile-nav-item').forEach(item => {
+    const href = item.getAttribute('href') || '';
+    if (
+      (currentPath === '/' && href === '/') ||
+      (currentPath === '/index.html' && href === '/') ||
+      (href !== '/' && !href.startsWith('tel:') && currentPath.includes(href))
+    ) {
+      item.classList.add('active');
+    }
+  });
 }
 
 export function renderHeader(): string {
@@ -70,7 +82,18 @@ export function renderHeader(): string {
         <a href="/about.html">About</a>
         <a href="/menu.html">Menu</a>
         <a href="/gallery.html">Gallery</a>
-        <a href="/locations.html">Locations</a>
+        <div class="nav-dropdown">
+          <a href="/locations.html" class="nav-dropdown-trigger">Locations</a>
+          <div class="nav-dropdown-menu">
+            ${config.locations.map(loc => `
+              <a href="${loc.googleMapsUrl}" target="_blank" rel="noopener noreferrer" class="nav-dropdown-item">
+                <span class="nav-dropdown-label">${loc.label.split('—')[0].trim()}</span>
+                <span class="nav-dropdown-sub">${loc.address.city}</span>
+              </a>
+            `).join('')}
+            <a href="/locations.html" class="nav-dropdown-item nav-dropdown-all">View All Locations</a>
+          </div>
+        </div>
         <a href="/contact.html">Contact</a>
         <a href="/contact.html#reservation" class="nav-reserve">Reserve</a>
       </nav>

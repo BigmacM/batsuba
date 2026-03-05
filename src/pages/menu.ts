@@ -89,6 +89,25 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="container" id="menu-content">
         ${renderMenuSections()}
       </div>
+
+      <!-- Floating mobile category selector -->
+      <div class="menu-fab" id="menu-fab" aria-label="Jump to category">
+        <span class="menu-fab-label" id="menu-fab-label">Quick Dishes</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+      </div>
+      <div class="menu-fab-overlay" id="menu-fab-overlay">
+        <div class="menu-fab-sheet">
+          <div class="menu-fab-sheet-header">
+            <span>Jump to Category</span>
+            <button id="menu-fab-close" aria-label="Close">&times;</button>
+          </div>
+          <div class="menu-fab-sheet-list">
+            ${MENU_CATEGORIES.map(cat => `
+              <button class="menu-fab-item" data-target="${cat.id}">${cat.label}</button>
+            `).join('')}
+          </div>
+        </div>
+      </div>
     </main>
     ${renderFooter()}
 
@@ -105,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAnimations();
   initDragScroll('.category-nav');
   initMenuInteractions();
+  initMenuFab();
 });
 
 function initMenuInteractions(): void {
@@ -160,4 +180,55 @@ function initMenuInteractions(): void {
       });
     });
   }
+}
+
+function initMenuFab(): void {
+  const fab = document.getElementById('menu-fab');
+  const fabLabel = document.getElementById('menu-fab-label');
+  const overlay = document.getElementById('menu-fab-overlay');
+  const closeBtn = document.getElementById('menu-fab-close');
+
+  if (!fab || !fabLabel || !overlay) return;
+
+  // Update fab label when active category changes
+  const updateLabel = () => {
+    const active = document.querySelector('.category-pill.active');
+    if (active) {
+      fabLabel.textContent = active.textContent?.trim() || '';
+    }
+  };
+
+  // Watch for class changes on pills
+  const pillObserver = new MutationObserver(updateLabel);
+  document.querySelectorAll('.category-pill').forEach(pill => {
+    pillObserver.observe(pill, { attributes: true, attributeFilter: ['class'] });
+  });
+
+  // Toggle overlay
+  fab.addEventListener('click', () => {
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+
+  const closeOverlay = () => {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  closeBtn?.addEventListener('click', closeOverlay);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeOverlay();
+  });
+
+  // Category item click
+  overlay.querySelectorAll('.menu-fab-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const targetId = item.getAttribute('data-target');
+      if (targetId) {
+        const section = document.getElementById(targetId);
+        section?.scrollIntoView({ behavior: 'smooth' });
+      }
+      closeOverlay();
+    });
+  });
 }

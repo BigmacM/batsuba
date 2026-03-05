@@ -91,9 +91,17 @@ document.addEventListener('DOMContentLoaded', () => {
             ${config.locations.map(loc => `
               <div>
                 <h3 style="margin-bottom: 1rem; color: var(--color-primary);">${loc.label}</h3>
-                <!-- Replace src with Google Maps embed URL for ${loc.label} -->
-                <div class="map-placeholder" aria-label="Map for ${loc.label}">
-                  Map placeholder — Replace with Google Maps embed
+                <div class="map-embed">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2000!2d${loc.coordinates.lng}!3d${loc.coordinates.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sth"
+                    width="100%"
+                    height="300"
+                    style="border:0; border-radius: var(--radius-md);"
+                    allowfullscreen
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    title="Map for ${loc.label}"
+                  ></iframe>
                 </div>
               </div>
             `).join('')}

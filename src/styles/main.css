@@ -353,6 +353,82 @@ main {
   color: var(--color-black) !important;
 }
 
+/* Location Dropdown */
+.nav-dropdown {
+  position: relative;
+}
+
+.nav-dropdown-trigger {
+  cursor: pointer;
+}
+
+.nav-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 14rem;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 0.5rem 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  z-index: 100;
+}
+
+.nav-dropdown:hover .nav-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.nav-dropdown-item {
+  display: flex;
+  flex-direction: column;
+  padding: 0.625rem 1rem;
+  color: var(--color-text) !important;
+  transition: background 0.15s ease;
+}
+
+.nav-dropdown-item::after {
+  display: none !important;
+}
+
+.nav-dropdown-item:hover {
+  background: var(--color-cream);
+}
+
+.nav-dropdown-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.nav-dropdown-sub {
+  font-size: 0.6875rem;
+  color: var(--color-text-muted);
+  margin-top: 0.125rem;
+}
+
+.nav-dropdown-all {
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  margin-top: 0.25rem;
+  padding-top: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-primary) !important;
+}
+
+.nav-dropdown-all .nav-dropdown-label,
+.nav-dropdown-all .nav-dropdown-sub {
+  display: none;
+}
+
 /* Hamburger */
 .hamburger {
   display: none;
@@ -407,6 +483,57 @@ main {
 
   .nav-links a {
     font-size: 1.25rem;
+  }
+
+  /* Flatten dropdown in mobile menu */
+  .nav-dropdown {
+    display: contents;
+  }
+
+  .nav-dropdown-menu {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    background: none;
+    box-shadow: none;
+    padding: 0;
+    min-width: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .nav-dropdown-trigger {
+    display: none;
+  }
+
+  .nav-dropdown-item {
+    color: rgba(255, 255, 255, 0.85) !important;
+    align-items: center;
+    padding: 0;
+  }
+
+  .nav-dropdown-item:hover {
+    background: none;
+  }
+
+  .nav-dropdown-label {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1rem;
+  }
+
+  .nav-dropdown-sub {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.75rem;
+  }
+
+  .nav-dropdown-all {
+    border-top: none;
+    margin-top: 0;
+    padding-top: 0;
+    color: var(--color-accent) !important;
+    font-size: 1rem;
   }
 }
 
@@ -1072,6 +1199,123 @@ main {
   white-space: nowrap;
 }
 
+/* ── Floating Menu Category FAB (mobile only) ─────────────── */
+.menu-fab {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .menu-fab {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: fixed;
+    bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 998;
+    padding: 0.625rem 1.25rem;
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-radius: 2rem;
+    box-shadow: 0 4px 20px rgba(74, 16, 32, 0.4);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    white-space: nowrap;
+    max-width: calc(100vw - 3rem);
+  }
+
+  .menu-fab:active {
+    transform: translateX(-50%) scale(0.96);
+  }
+
+  .menu-fab-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.menu-fab-overlay {
+  display: none;
+}
+
+.menu-fab-overlay.open {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.5);
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.menu-fab-sheet {
+  background: var(--color-white);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  width: 100%;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  animation: sheetSlideUp 0.3s ease;
+}
+
+@keyframes sheetSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.menu-fab-sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: var(--color-primary);
+}
+
+.menu-fab-sheet-header button {
+  font-size: 1.5rem;
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 0.25rem;
+  line-height: 1;
+}
+
+.menu-fab-sheet-list {
+  overflow-y: auto;
+  padding: 0.5rem 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.menu-fab-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.875rem 1.25rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  font-family: inherit;
+}
+
+.menu-fab-item:hover,
+.menu-fab-item:active {
+  background: var(--color-cream);
+  color: var(--color-primary);
+}
+
 /* ── Gallery ────────────────────────────────────────────────── */
 .gallery-tabs {
   display: flex;
@@ -1315,17 +1559,18 @@ main {
   background: var(--color-cream);
 }
 
-/* ── Map Placeholder ────────────────────────────────────────── */
-.map-placeholder {
+/* ── Map Embed ──────────────────────────────────────────────── */
+.map-embed {
   width: 100%;
-  height: 18rem;
-  background: var(--color-gray-light);
   border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-text-muted);
-  font-style: italic;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.map-embed iframe {
+  display: block;
+  width: 100%;
+  min-height: 18rem;
 }
 
 /* ── About Page ─────────────────────────────────────────────── */
@@ -1397,45 +1642,77 @@ main {
   margin-bottom: var(--space-2);
 }
 
-/* ── Mobile Floating Reserve Bar ───────────────────────────── */
-.mobile-reserve-bar {
+/* ── Mobile Bottom Navigation ──────────────────────────────── */
+.mobile-nav {
   display: none;
 }
 
 @media (max-width: 1023px) {
-  .mobile-reserve-bar {
-    display: block;
+  .mobile-nav {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     z-index: 999;
-    padding: 0.75rem 1rem;
-    background: rgba(74, 16, 32, 0.95);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-primary-dark);
+    padding: 0.5rem 0 calc(0.5rem + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  .mobile-reserve-btn {
+  .mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.4rem 0.75rem;
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    transition: color var(--transition);
+    text-decoration: none;
+  }
+
+  .mobile-nav-item svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .mobile-nav-item:hover,
+  .mobile-nav-item.active {
+    color: var(--color-accent);
+  }
+
+  /* Elevated center call button */
+  .mobile-nav-call {
+    position: relative;
+    bottom: 0.75rem;
+    width: 3.25rem;
+    height: 3.25rem;
+    padding: 0;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: var(--color-primary-dark);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    width: 100%;
-    padding: 0.875rem;
-    background: var(--color-accent);
-    color: var(--color-black);
-    font-weight: 700;
-    font-size: 0.9375rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-radius: var(--radius-sm);
-    transition: background var(--transition);
+    box-shadow: 0 4px 16px rgba(212, 165, 116, 0.4);
+    transition: transform var(--transition), box-shadow var(--transition);
   }
 
-  .mobile-reserve-btn:hover {
-    background: var(--color-accent-light);
+  .mobile-nav-call svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .mobile-nav-call:hover {
+    color: var(--color-primary-dark);
+    transform: scale(1.08);
+    box-shadow: 0 6px 24px rgba(212, 165, 116, 0.5);
   }
 
   /* Add bottom padding to footer so content isn't hidden behind bar */
