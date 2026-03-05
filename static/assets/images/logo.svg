@@ -1,0 +1,8 @@
+<svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="60" cy="60" r="58" stroke="#C9A84C" stroke-width="3" fill="#6B1B2A"/>
+  <circle cx="60" cy="60" r="52" stroke="#C9A84C" stroke-width="1" fill="none"/>
+  <text x="60" y="42" text-anchor="middle" fill="#C9A84C" font-size="14" font-family="Georgia, serif" font-weight="bold" letter-spacing="3">BUTSABA</text>
+  <line x1="25" y1="50" x2="95" y2="50" stroke="#C9A84C" stroke-width="0.75"/>
+  <text x="60" y="66" text-anchor="middle" fill="#FFFFFF" font-size="9" font-family="Lato, sans-serif" letter-spacing="4">WINE &amp; CAFE</text>
+  <text x="60" y="82" text-anchor="middle" fill="rgba(255,255,255,0.5)" font-size="7" font-family="Lato, sans-serif" letter-spacing="2">PATTAYA</text>
+</svg>
