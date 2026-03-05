@@ -4,6 +4,7 @@ import { renderFooter } from '../components/footer';
 import { generateBreadcrumbSchema } from '../utils/seo';
 import { initTracking } from '../components/tracking';
 import { initAnimations } from '../utils/animations';
+import { ICONS } from '../utils/icons';
 
 const config = SITE_CONFIG;
 
@@ -36,19 +37,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div style="margin-bottom: var(--space-5);">
                   <h4 style="margin-bottom: var(--space-2); color: var(--color-text);">${loc.label}</h4>
                   <div class="location-detail">
-                    <span class="detail-icon" aria-hidden="true">&#128205;</span>
+                    <span class="detail-icon" aria-hidden="true">${ICONS.mapPin}</span>
                     <span>${loc.address.full}</span>
                   </div>
                   <div class="location-detail">
-                    <span class="detail-icon" aria-hidden="true">&#128222;</span>
+                    <span class="detail-icon" aria-hidden="true">${ICONS.phone}</span>
                     <a href="tel:${loc.phone}" style="color: var(--color-primary); font-weight: 700;">${loc.phoneFormatted}</a>
                   </div>
                   <div class="location-detail">
-                    <span class="detail-icon" aria-hidden="true">&#9993;</span>
+                    <span class="detail-icon" aria-hidden="true">${ICONS.mail}</span>
                     <a href="mailto:${loc.email}">${loc.email}</a>
                   </div>
                   <div class="location-detail">
-                    <span class="detail-icon" aria-hidden="true">&#128340;</span>
+                    <span class="detail-icon" aria-hidden="true">${ICONS.clock}</span>
                     <span>${loc.hours.display} — ${loc.hours.days}</span>
                   </div>
                 </div>
@@ -56,11 +57,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
               <h4 style="color: var(--color-primary); margin-bottom: var(--space-2); margin-top: var(--space-4);">Follow Us</h4>
               <div class="social-links">
-                <a href="${config.social.facebook}" target="_blank" rel="noopener noreferrer" aria-label="Facebook">FB</a>
-                <a href="${config.social.instagram}" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
+                <a href="${config.social.facebook}" target="_blank" rel="noopener noreferrer" aria-label="Facebook">${ICONS.facebook}</a>
+                <a href="${config.social.instagram}" target="_blank" rel="noopener noreferrer" aria-label="Instagram">${ICONS.instagram}</a>
               </div>
 
-              <div style="margin-top: var(--space-5); padding: var(--space-3); background: var(--color-white); border-radius: var(--radius-md); border-left: 4px solid var(--color-gold);">
+              <div style="margin-top: var(--space-5); padding: var(--space-3); background: var(--color-white); border-radius: var(--radius-md); border-left: 4px solid var(--color-accent);">
                 <h4 style="margin-bottom: 0.5rem;">Opening Hours</h4>
                 <p style="color: var(--color-text-muted); margin: 0;">${config.locations[0].hours.display} — Daily at both locations</p>
               </div>
@@ -117,12 +118,14 @@ document.addEventListener('DOMContentLoaded', () => {
                   <label for="message">Message</label>
                   <textarea id="message" name="message" placeholder="Special requests, dietary requirements, celebrations..."></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Reservation Request</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%; gap: 0.5rem;">
+                  ${ICONS.whatsapp} Send via WhatsApp
+                </button>
               </form>
 
               <div class="form-success" id="form-success">
-                <h3>Thank You!</h3>
-                <p style="color: var(--color-text-muted);">Your reservation inquiry has been received. Please call us at <a href="tel:${config.locations[0].phone}" style="color: var(--color-primary); font-weight: 700;">${config.locations[0].phoneFormatted}</a> to confirm your booking.</p>
+                <h3>Redirecting to WhatsApp...</h3>
+                <p style="color: var(--color-text-muted);">Your reservation request is being sent via WhatsApp. If it didn't open automatically, <a href="#" id="whatsapp-link" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); font-weight: 700;">click here</a>.</p>
                 <button class="btn btn-outline" id="form-reset" style="margin-top: 1rem; color: var(--color-primary); border-color: var(--color-primary);">Make Another Reservation</button>
               </div>
             </div>
@@ -154,12 +157,60 @@ function initForm(): void {
   const form = document.getElementById('reservation-form') as HTMLFormElement;
   const success = document.getElementById('form-success');
   const resetBtn = document.getElementById('form-reset');
+  const whatsappLink = document.getElementById('whatsapp-link') as HTMLAnchorElement;
+
+  // Map location IDs to WhatsApp numbers (without + prefix, as wa.me requires)
+  const locationPhones: Record<string, string> = {};
+  config.locations.forEach(loc => {
+    locationPhones[loc.id] = loc.phone.replace('+', '');
+  });
 
   if (form && success) {
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const data = new FormData(form);
+      const name = data.get('name') as string;
+      const email = data.get('email') as string;
+      const phone = data.get('phone') as string;
+      const locationId = data.get('location') as string;
+      const date = data.get('date') as string;
+      const time = data.get('time') as string;
+      const partySize = data.get('party-size') as string;
+      const message = data.get('message') as string;
+
+      const locationLabel = config.locations.find(l => l.id === locationId)?.label || locationId;
+      const whatsappNumber = locationPhones[locationId] || locationPhones[config.locations[0].id];
+
+      const lines = [
+        `*Reservation Request — BUTSABA Wine & Cafe*`,
+        ``,
+        `*Name:* ${name}`,
+        `*Email:* ${email}`,
+        phone ? `*Phone:* ${phone}` : '',
+        `*Location:* ${locationLabel}`,
+        `*Date:* ${date}`,
+        `*Time:* ${time}`,
+        `*Party Size:* ${partySize}`,
+        message ? `*Message:* ${message}` : '',
+      ].filter(Boolean).join('\n');
+
+      const waUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(lines)}`;
+
+      // Update fallback link
+      if (whatsappLink) {
+        whatsappLink.href = waUrl;
+      }
+
+      // Show success and open WhatsApp
       form.style.display = 'none';
       success.classList.add('show');
+      window.open(waUrl, '_blank');
     });
   }
 

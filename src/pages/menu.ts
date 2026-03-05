@@ -5,7 +5,7 @@ import { renderFooter } from '../components/footer';
 import { generateMenuSchema, generateRestaurantSchema } from '../components/schema';
 import { generateBreadcrumbSchema } from '../utils/seo';
 import { initTracking } from '../components/tracking';
-import { initAnimations } from '../utils/animations';
+import { initAnimations, initDragScroll } from '../utils/animations';
 
 const config = SITE_CONFIG;
 
@@ -16,7 +16,7 @@ function renderMenuSections(): string {
 
   const renderSection = (cats: typeof MENU_CATEGORIES) => cats.map(cat => `
     <div class="menu-section" id="${cat.id}" data-category="${cat.id}">
-      <h2>${cat.emoji ? cat.emoji + ' ' : ''}${cat.label}</h2>
+      <h2>${cat.label}</h2>
       ${cat.note ? `<p class="menu-note">${cat.note}</p>` : ''}
       <div class="menu-grid">
         ${cat.items.map(item => `
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="category-nav-inner">
           ${MENU_CATEGORIES.map(cat => `
             <button class="category-pill" data-target="${cat.id}" aria-label="Jump to ${cat.label}">
-              ${cat.emoji ? cat.emoji + ' ' : ''}${cat.label}
+              ${cat.label}
             </button>
           `).join('')}
         </div>
@@ -103,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeader();
   initTracking();
   initAnimations();
+  initDragScroll('.category-nav');
   initMenuInteractions();
 });
 

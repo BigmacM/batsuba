@@ -58,10 +58,10 @@ export function renderHeader(): string {
     <div class="header-inner">
       <a href="/" class="header-logo" aria-label="${config.brand.name} — Home">
         <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <circle cx="20" cy="20" r="19" stroke="#C9A84C" stroke-width="2"/>
-          <text x="20" y="16" text-anchor="middle" fill="#C9A84C" font-size="6" font-family="serif" font-weight="bold">BUTSABA</text>
+          <circle cx="20" cy="20" r="19" stroke="#D4A574" stroke-width="2"/>
+          <text x="20" y="16" text-anchor="middle" fill="#D4A574" font-size="6" font-family="serif" font-weight="bold">BUTSABA</text>
           <text x="20" y="24" text-anchor="middle" fill="#fff" font-size="4" font-family="sans-serif">WINE &amp; CAFE</text>
-          <line x1="8" y1="28" x2="32" y2="28" stroke="#C9A84C" stroke-width="0.5"/>
+          <line x1="8" y1="28" x2="32" y2="28" stroke="#D4A574" stroke-width="0.5"/>
         </svg>
         <span>BUTSABA</span>
       </a>

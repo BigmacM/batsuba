@@ -5,6 +5,7 @@ import { generateLocalBusinessSchemas, generateFAQSchema } from '../components/s
 import { generateBreadcrumbSchema } from '../utils/seo';
 import { initTracking } from '../components/tracking';
 import { initAnimations } from '../utils/animations';
+import { ICONS } from '../utils/icons';
 
 const config = SITE_CONFIG;
 
@@ -56,22 +57,22 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="location-card">
                 <h3>${loc.label}</h3>
                 <div class="location-detail">
-                  <span class="detail-icon" aria-hidden="true">&#128205;</span>
+                  <span class="detail-icon" aria-hidden="true">${ICONS.mapPin}</span>
                   <span>${loc.address.full}</span>
                 </div>
                 <div class="location-detail">
-                  <span class="detail-icon" aria-hidden="true">&#128222;</span>
+                  <span class="detail-icon" aria-hidden="true">${ICONS.phone}</span>
                   <a href="tel:${loc.phone}">${loc.phoneFormatted}</a>
                 </div>
                 <div class="location-detail">
-                  <span class="detail-icon" aria-hidden="true">&#9993;</span>
+                  <span class="detail-icon" aria-hidden="true">${ICONS.mail}</span>
                   <a href="mailto:${loc.email}">${loc.email}</a>
                 </div>
                 <div class="location-detail">
-                  <span class="detail-icon" aria-hidden="true">&#128340;</span>
+                  <span class="detail-icon" aria-hidden="true">${ICONS.clock}</span>
                   <span>${loc.hours.display} — ${loc.hours.days}</span>
                 </div>
-                <div class="rating-badge">★ ${loc.googleRating}/5 (${loc.googleReviewCount} reviews)</div>
+                <div class="rating-badge">${ICONS.star} ${loc.googleRating}/5 (${loc.googleReviewCount} reviews)</div>
                 <a href="${loc.googleMapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="margin-top: 1.5rem; display: inline-flex;">Get Directions</a>
               </div>
             `).join('')}
