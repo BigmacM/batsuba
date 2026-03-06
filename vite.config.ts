@@ -15,6 +15,8 @@ export default defineConfig({
         gallery: resolve(__dirname, 'public/gallery.html'),
         locations: resolve(__dirname, 'public/locations.html'),
         contact: resolve(__dirname, 'public/contact.html'),
+        treetown: resolve(__dirname, 'public/tree-town.html'),
+        ayahotel: resolve(__dirname, 'public/aya-hotel.html'),
         notfound: resolve(__dirname, 'public/404.html'),
       },
     },

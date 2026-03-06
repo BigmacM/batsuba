@@ -79,6 +79,14 @@ export function generateFAQSchema(faqs: { question: string; answer: string }[]):
   return JSON.stringify(schema);
 }
 
+export function generateSingleLocationSchema(locIndex: number): string {
+  const schema = {
+    '@context': 'https://schema.org',
+    ...locationSchema(locIndex),
+  };
+  return JSON.stringify(schema);
+}
+
 export function generateMenuSchema(): string {
   const schema = {
     '@context': 'https://schema.org',

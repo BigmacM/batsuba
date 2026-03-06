@@ -18,28 +18,26 @@ function renderMenuSections(): string {
   // Each category can have 1+ images from the in-store menu photos.
   // Place images in /images/menu-pages/ named: {category-id}.jpg or {category-id}-2.jpg etc.
   const categoryImages: Record<string, string[]> = {
-    'quick-dishes':       ['quick-dishes.jpg'],
-    'salads':             ['salads.jpg'],
-    'snacks-appetizers':  ['snacks-appetizers.jpg'],
-    'japanese':           ['japanese.jpg'],
-    'soups':              ['soups.jpg'],
-    'pasta':              ['pasta.jpg'],
-    'main-courses':       ['main-courses.jpg'],
-    'pizza':              ['pizza.jpg'],
-    'steak-meat':         ['steak-meat.jpg'],
-    'seafood':            ['seafood.jpg', 'seafood-2.jpg'],
-    'specials':           ['specials.jpg'],
-    'thai-soups':         ['thai-soups.jpg', 'thai-soups-2.jpg'],
-    'thai-dishes':        ['thai-dishes.jpg', 'thai-dishes-2.jpg'],
-    'somtam':             ['somtam.jpg'],
-    'yam':                ['yam.jpg'],
-    'fried-vegetable':    ['fried-vegetable.jpg'],
-    'stir-fried':         ['stir-fried.jpg'],
-    'beef-pork-salads':   ['beef-pork-salads.jpg'],
-    'pork-dishes':        ['pork-dishes.jpg'],
-    'basil-dishes':       ['basil-dishes.jpg'],
-    'fried-rice':         ['fried-rice.jpg'],
-    'beverages-extras':   ['beverages-extras.jpg'],
+    'quick-dishes':       ['Quick Dishes (1).png', 'Quick Dishes (2).png'],
+    'salads':             ['Salad (1).png', 'Salad (2).png'],
+    'snacks-appetizers':  ['Snack (1).png', 'Snack (2).png'],
+    'soups':              ['Soup.png'],
+    'pasta':              ['Pasta (1).png', 'Pasta (2).png', 'Pasta (3).png', 'Pasta (4).png'],
+    'main-courses':       ['Secondo Piatto (1).png', 'Secondo Piatto (2).png', 'Secondo Piatto (3).png'],
+    'pizza':              ['Pizza (1).png', 'Pizza (2).png'],
+    'steak-meat':         ['Steak and Meat Dish (1).png', 'Steak and Meat Dish (2).png'],
+    'seafood':            ['Seafood (1).png', 'Seafood (2).png', 'Seafood (3).png'],
+    'specials':           ['Recommended (1).png', 'Recommended (2).png'],
+    'thai-soups':         ['Thai Soup (1).png', 'Thai Soup (2).png'],
+    'thai-dishes':        ['Thai Food  (1).png', 'Thai Food  (2).png'],
+    'somtam':             ['Thai Food  (3).png'],
+    'yam':                ['Thai Food  (4).png'],
+    'fried-vegetable':    ['Thai Food  (5).png'],
+    'stir-fried':         ['Thai Food  (6).png'],
+    'beef-pork-salads':   ['Thai Food  (7).png'],
+    'pork-dishes':        ['Thai Food  (8).png'],
+    'basil-dishes':       ['Thai Food  (9).png'],
+    'fried-rice':         ['Thai Food  (10).png'],
   };
 
   const renderSection = (cats: typeof MENU_CATEGORIES) => cats.map(cat => {
@@ -47,7 +45,7 @@ function renderMenuSections(): string {
     const imageStrip = images.length > 0 ? `
       <div class="menu-section-photos">
         ${images.map(img => `
-          <img src="/images/menu-pages/${img}" alt="${cat.label} menu" loading="lazy" onerror="this.parentElement.style.display='none'">
+          <img src="/images/menu-pages/${encodeURIComponent(img)}" alt="${cat.label} menu" loading="lazy" onerror="this.parentElement.style.display='none'">
         `).join('')}
       </div>
     ` : '';
@@ -199,7 +197,7 @@ function initMenuInteractions(): void {
         }
       });
     },
-    { threshold: 0.2, rootMargin: `-${getComputedStyle(document.documentElement).getPropertyValue('--header-height') || '72px'} 0px -60% 0px` }
+    { threshold: 0.2, rootMargin: `-${getComputedStyle(document.documentElement).getPropertyValue('--total-header-height') || '104px'} 0px -60% 0px` }
   );
 
   sections.forEach(s => observer.observe(s));
