@@ -4,7 +4,8 @@ import { renderFooter } from '../components/footer';
 import { generateRestaurantSchema } from '../components/schema';
 import { generateBreadcrumbSchema } from '../utils/seo';
 import { initTracking } from '../components/tracking';
-import { initAnimations } from '../utils/animations';
+import { initAnimations, initDragScroll } from '../utils/animations';
+import { ICONS } from '../utils/icons';
 
 const config = SITE_CONFIG;
 const loc1 = config.locations[0];
@@ -34,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <h1>Where Fine Dining Meets Elegant Wine</h1>
           <p>${config.brand.tagline}</p>
           <div class="hero-ctas">
-            <a href="/menu.html" class="btn btn-gold">Explore Our Menu</a>
+            <a href="/menu.html" class="btn btn-accent">Explore Our Menu</a>
             <a href="/contact.html#reservation" class="btn btn-outline">Book a Table</a>
           </div>
         </div>
@@ -103,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <h2>All You Can Drink</h2>
           <p>${config.promotions.allYouCanDrink.price} THB / ${config.promotions.allYouCanDrink.duration}</p>
           <p style="font-size: 0.9375rem;">${config.promotions.allYouCanDrink.availability}</p>
-          <a href="/contact.html#reservation" class="btn btn-gold" style="margin-top: 1rem;">Reserve Now</a>
+          <a href="/contact.html#reservation" class="btn btn-accent" style="margin-top: 1rem;">Reserve Now</a>
         </div>
       </section>
 
@@ -116,17 +117,23 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="grid-3 animate-fade-up">
             <div class="cuisine-card">
-              <div class="cuisine-icon" aria-hidden="true">&#127470;&#127481;</div>
+              <div class="cuisine-icon" aria-hidden="true">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="20"/><path d="M16 18c0-2 2-4 4-4s4 2 4 0 2-4 4-4 4 2 4 4"/><path d="M12 28h24"/><path d="M14 32h20"/></svg>
+              </div>
               <h3>Italian Fine Dining</h3>
               <p>Wood-fired pizzas, handmade pastas, and premium steaks crafted with authentic Italian techniques and imported ingredients.</p>
             </div>
             <div class="cuisine-card">
-              <div class="cuisine-icon" aria-hidden="true">&#127481;&#127469;</div>
+              <div class="cuisine-icon" aria-hidden="true">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8c-4 2-8 8-8 16h16c0-8-4-14-8-16z"/><path d="M16 24c-2 4-2 8 0 12h16c2-4 2-8 0-12"/><line x1="24" y1="36" x2="24" y2="42"/><line x1="18" y1="42" x2="30" y2="42"/></svg>
+              </div>
               <h3>Thai Classics</h3>
               <p>From fiery Tom Yam Kung to fragrant Green Curry, savor the bold and aromatic flavors of traditional Thai cuisine.</p>
             </div>
             <div class="cuisine-card">
-              <div class="cuisine-icon" aria-hidden="true">&#127843;</div>
+              <div class="cuisine-icon" aria-hidden="true">
+                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 28h28"/><path d="M14 28c0-8 4-14 10-16 6 2 10 8 10 16"/><ellipse cx="24" cy="30" rx="14" ry="4"/><path d="M20 34v4"/><path d="M28 34v4"/><line x1="16" y1="38" x2="32" y2="38"/></svg>
+              </div>
               <h3>Japanese Fusion</h3>
               <p>Delicate sashimi, crispy tempura, and expertly prepared Japanese dishes that complement our Italian and Thai offerings.</p>
             </div>
@@ -174,18 +181,18 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="location-card">
                 <h3>${loc.label}</h3>
                 <div class="location-detail">
-                  <span class="detail-icon" aria-hidden="true">&#128205;</span>
+                  <span class="detail-icon" aria-hidden="true">${ICONS.mapPin}</span>
                   <span>${loc.address.full}</span>
                 </div>
                 <div class="location-detail">
-                  <span class="detail-icon" aria-hidden="true">&#128222;</span>
+                  <span class="detail-icon" aria-hidden="true">${ICONS.phone}</span>
                   <a href="tel:${loc.phone}">${loc.phoneFormatted}</a>
                 </div>
                 <div class="location-detail">
-                  <span class="detail-icon" aria-hidden="true">&#128340;</span>
+                  <span class="detail-icon" aria-hidden="true">${ICONS.clock}</span>
                   <span>${loc.hours.display} — Daily</span>
                 </div>
-                <div class="rating-badge">★ ${loc.googleRating}/5 (${loc.googleReviewCount} reviews)</div>
+                <div class="rating-badge">${ICONS.star} ${loc.googleRating}/5 (${loc.googleReviewCount} reviews)</div>
                 <a href="${loc.googleMapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="margin-top: 1.5rem; display: inline-flex;">Get Directions</a>
               </div>
             `).join('')}
@@ -222,4 +229,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeader();
   initTracking();
   initAnimations();
+  initDragScroll('.dish-strip');
 });

@@ -5,7 +5,7 @@ import { renderFooter } from '../components/footer';
 import { generateMenuSchema, generateRestaurantSchema } from '../components/schema';
 import { generateBreadcrumbSchema } from '../utils/seo';
 import { initTracking } from '../components/tracking';
-import { initAnimations } from '../utils/animations';
+import { initAnimations, initDragScroll } from '../utils/animations';
 
 const config = SITE_CONFIG;
 
@@ -14,10 +14,49 @@ function renderMenuSections(): string {
   const italianIds = ['quick-dishes', 'salads', 'snacks-appetizers', 'japanese', 'soups', 'pasta', 'main-courses', 'pizza', 'steak-meat', 'seafood', 'specials'];
   const thaiIds = ['thai-soups', 'thai-dishes', 'somtam', 'yam', 'fried-vegetable', 'stir-fried', 'beef-pork-salads', 'pork-dishes', 'basil-dishes', 'fried-rice', 'beverages-extras'];
 
-  const renderSection = (cats: typeof MENU_CATEGORIES) => cats.map(cat => `
+  // Map category IDs to their menu page image filenames.
+  // Each category can have 1+ images from the in-store menu photos.
+  // Place images in /images/menu-pages/ named: {category-id}.jpg or {category-id}-2.jpg etc.
+  const categoryImages: Record<string, string[]> = {
+    'quick-dishes':       ['quick-dishes.jpg'],
+    'salads':             ['salads.jpg'],
+    'snacks-appetizers':  ['snacks-appetizers.jpg'],
+    'japanese':           ['japanese.jpg'],
+    'soups':              ['soups.jpg'],
+    'pasta':              ['pasta.jpg'],
+    'main-courses':       ['main-courses.jpg'],
+    'pizza':              ['pizza.jpg'],
+    'steak-meat':         ['steak-meat.jpg'],
+    'seafood':            ['seafood.jpg', 'seafood-2.jpg'],
+    'specials':           ['specials.jpg'],
+    'thai-soups':         ['thai-soups.jpg', 'thai-soups-2.jpg'],
+    'thai-dishes':        ['thai-dishes.jpg', 'thai-dishes-2.jpg'],
+    'somtam':             ['somtam.jpg'],
+    'yam':                ['yam.jpg'],
+    'fried-vegetable':    ['fried-vegetable.jpg'],
+    'stir-fried':         ['stir-fried.jpg'],
+    'beef-pork-salads':   ['beef-pork-salads.jpg'],
+    'pork-dishes':        ['pork-dishes.jpg'],
+    'basil-dishes':       ['basil-dishes.jpg'],
+    'fried-rice':         ['fried-rice.jpg'],
+    'beverages-extras':   ['beverages-extras.jpg'],
+  };
+
+  const renderSection = (cats: typeof MENU_CATEGORIES) => cats.map(cat => {
+    const images = categoryImages[cat.id] || [];
+    const imageStrip = images.length > 0 ? `
+      <div class="menu-section-photos">
+        ${images.map(img => `
+          <img src="/images/menu-pages/${img}" alt="${cat.label} menu" loading="lazy" onerror="this.parentElement.style.display='none'">
+        `).join('')}
+      </div>
+    ` : '';
+
+    return `
     <div class="menu-section" id="${cat.id}" data-category="${cat.id}">
-      <h2>${cat.emoji ? cat.emoji + ' ' : ''}${cat.label}</h2>
+      <h2>${cat.label}</h2>
       ${cat.note ? `<p class="menu-note">${cat.note}</p>` : ''}
+      ${imageStrip}
       <div class="menu-grid">
         ${cat.items.map(item => `
           <div class="menu-item" data-name="${item.name.toLowerCase()}">
@@ -30,7 +69,8 @@ function renderMenuSections(): string {
         `).join('')}
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 
   const italianCats = MENU_CATEGORIES.filter(c => italianIds.includes(c.id));
   const thaiCats = MENU_CATEGORIES.filter(c => thaiIds.includes(c.id));
@@ -79,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="category-nav-inner">
           ${MENU_CATEGORIES.map(cat => `
             <button class="category-pill" data-target="${cat.id}" aria-label="Jump to ${cat.label}">
-              ${cat.emoji ? cat.emoji + ' ' : ''}${cat.label}
+              ${cat.label}
             </button>
           `).join('')}
         </div>
@@ -88,6 +128,25 @@ document.addEventListener('DOMContentLoaded', () => {
       <!-- Menu Content -->
       <div class="container" id="menu-content">
         ${renderMenuSections()}
+      </div>
+
+      <!-- Floating mobile category selector -->
+      <div class="menu-fab" id="menu-fab" aria-label="Jump to category">
+        <span class="menu-fab-label" id="menu-fab-label">Quick Dishes</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+      </div>
+      <div class="menu-fab-overlay" id="menu-fab-overlay">
+        <div class="menu-fab-sheet">
+          <div class="menu-fab-sheet-header">
+            <span>Jump to Category</span>
+            <button id="menu-fab-close" aria-label="Close">&times;</button>
+          </div>
+          <div class="menu-fab-sheet-list">
+            ${MENU_CATEGORIES.map(cat => `
+              <button class="menu-fab-item" data-target="${cat.id}">${cat.label}</button>
+            `).join('')}
+          </div>
+        </div>
       </div>
     </main>
     ${renderFooter()}
@@ -103,7 +162,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeader();
   initTracking();
   initAnimations();
+  initDragScroll('.category-nav');
+  initDragScroll('.menu-section-photos');
   initMenuInteractions();
+  initMenuFab();
 });
 
 function initMenuInteractions(): void {
@@ -159,4 +221,55 @@ function initMenuInteractions(): void {
       });
     });
   }
+}
+
+function initMenuFab(): void {
+  const fab = document.getElementById('menu-fab');
+  const fabLabel = document.getElementById('menu-fab-label');
+  const overlay = document.getElementById('menu-fab-overlay');
+  const closeBtn = document.getElementById('menu-fab-close');
+
+  if (!fab || !fabLabel || !overlay) return;
+
+  // Update fab label when active category changes
+  const updateLabel = () => {
+    const active = document.querySelector('.category-pill.active');
+    if (active) {
+      fabLabel.textContent = active.textContent?.trim() || '';
+    }
+  };
+
+  // Watch for class changes on pills
+  const pillObserver = new MutationObserver(updateLabel);
+  document.querySelectorAll('.category-pill').forEach(pill => {
+    pillObserver.observe(pill, { attributes: true, attributeFilter: ['class'] });
+  });
+
+  // Toggle overlay
+  fab.addEventListener('click', () => {
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+
+  const closeOverlay = () => {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  closeBtn?.addEventListener('click', closeOverlay);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeOverlay();
+  });
+
+  // Category item click
+  overlay.querySelectorAll('.menu-fab-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const targetId = item.getAttribute('data-target');
+      if (targetId) {
+        const section = document.getElementById(targetId);
+        section?.scrollIntoView({ behavior: 'smooth' });
+      }
+      closeOverlay();
+    });
+  });
 }

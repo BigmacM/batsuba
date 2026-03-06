@@ -1,4 +1,5 @@
 import { SITE_CONFIG } from '../utils/config';
+import { ICONS } from '../utils/icons';
 
 export function renderFooter(): string {
   const config = SITE_CONFIG;
@@ -6,6 +7,28 @@ export function renderFooter(): string {
   const loc2 = config.locations[1];
 
   return `
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-nav" aria-label="Mobile navigation">
+    <a href="/" class="mobile-nav-item">
+      ${ICONS.home}
+      <span>Home</span>
+    </a>
+    <a href="/menu.html" class="mobile-nav-item">
+      ${ICONS.menu}
+      <span>Menu</span>
+    </a>
+    <a href="tel:${loc1.phone}" class="mobile-nav-item mobile-nav-call" aria-label="Call us">
+      ${ICONS.phone}
+    </a>
+    <a href="/contact.html#reservation" class="mobile-nav-item">
+      ${ICONS.mail}
+      <span>Contact</span>
+    </a>
+    <a href="/locations.html" class="mobile-nav-item">
+      ${ICONS.map}
+      <span>Map</span>
+    </a>
+  </nav>
   <footer class="site-footer" role="contentinfo">
     <div class="container">
       <div class="footer-grid">
@@ -13,8 +36,8 @@ export function renderFooter(): string {
           <div class="logo-text">${config.brand.name}</div>
           <p>${config.brand.tagline}</p>
           <div class="social-links" style="margin-top: 1.5rem;">
-            <a href="${config.social.facebook}" target="_blank" rel="noopener noreferrer" aria-label="Facebook">FB</a>
-            <a href="${config.social.instagram}" target="_blank" rel="noopener noreferrer" aria-label="Instagram">IG</a>
+            <a href="${config.social.facebook}" target="_blank" rel="noopener noreferrer" aria-label="Facebook">${ICONS.facebook}</a>
+            <a href="${config.social.instagram}" target="_blank" rel="noopener noreferrer" aria-label="Instagram">${ICONS.instagram}</a>
           </div>
         </div>
         <div class="footer-col">

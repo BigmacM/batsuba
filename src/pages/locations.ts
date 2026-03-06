@@ -5,6 +5,7 @@ import { generateLocalBusinessSchemas, generateFAQSchema } from '../components/s
 import { generateBreadcrumbSchema } from '../utils/seo';
 import { initTracking } from '../components/tracking';
 import { initAnimations } from '../utils/animations';
+import { ICONS } from '../utils/icons';
 
 const config = SITE_CONFIG;
 
@@ -56,22 +57,22 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="location-card">
                 <h3>${loc.label}</h3>
                 <div class="location-detail">
-                  <span class="detail-icon" aria-hidden="true">&#128205;</span>
+                  <span class="detail-icon" aria-hidden="true">${ICONS.mapPin}</span>
                   <span>${loc.address.full}</span>
                 </div>
                 <div class="location-detail">
-                  <span class="detail-icon" aria-hidden="true">&#128222;</span>
+                  <span class="detail-icon" aria-hidden="true">${ICONS.phone}</span>
                   <a href="tel:${loc.phone}">${loc.phoneFormatted}</a>
                 </div>
                 <div class="location-detail">
-                  <span class="detail-icon" aria-hidden="true">&#9993;</span>
+                  <span class="detail-icon" aria-hidden="true">${ICONS.mail}</span>
                   <a href="mailto:${loc.email}">${loc.email}</a>
                 </div>
                 <div class="location-detail">
-                  <span class="detail-icon" aria-hidden="true">&#128340;</span>
+                  <span class="detail-icon" aria-hidden="true">${ICONS.clock}</span>
                   <span>${loc.hours.display} — ${loc.hours.days}</span>
                 </div>
-                <div class="rating-badge">★ ${loc.googleRating}/5 (${loc.googleReviewCount} reviews)</div>
+                <div class="rating-badge">${ICONS.star} ${loc.googleRating}/5 (${loc.googleReviewCount} reviews)</div>
                 <a href="${loc.googleMapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="margin-top: 1.5rem; display: inline-flex;">Get Directions</a>
               </div>
             `).join('')}
@@ -90,9 +91,17 @@ document.addEventListener('DOMContentLoaded', () => {
             ${config.locations.map(loc => `
               <div>
                 <h3 style="margin-bottom: 1rem; color: var(--color-primary);">${loc.label}</h3>
-                <!-- Replace src with Google Maps embed URL for ${loc.label} -->
-                <div class="map-placeholder" aria-label="Map for ${loc.label}">
-                  Map placeholder — Replace with Google Maps embed
+                <div class="map-embed">
+                  <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2000!2d${loc.coordinates.lng}!3d${loc.coordinates.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sth"
+                    width="100%"
+                    height="300"
+                    style="border:0; border-radius: var(--radius-md);"
+                    allowfullscreen
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    title="Map for ${loc.label}"
+                  ></iframe>
                 </div>
               </div>
             `).join('')}

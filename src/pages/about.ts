@@ -54,17 +54,23 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="grid-3 animate-fade-up">
             <div class="philosophy-card">
-              <div class="philosophy-icon" aria-hidden="true">&#127857;</div>
+              <div class="philosophy-icon" aria-hidden="true">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M15 9h.01"/><path d="M9 9h.01"/></svg>
+              </div>
               <h3>Authentic Ingredients</h3>
               <p>We source the finest Italian imports alongside the freshest local Thai produce, ensuring every ingredient meets our exacting standards of quality and flavor.</p>
             </div>
             <div class="philosophy-card">
-              <div class="philosophy-icon" aria-hidden="true">&#127863;</div>
+              <div class="philosophy-icon" aria-hidden="true">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"/><path d="M7 10h10"/><path d="M12 15v7"/><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5z"/></svg>
+              </div>
               <h3>Expert Wine Curation</h3>
               <p>Our sommelier has hand-selected over 200 bottles from the world's most celebrated vineyards, offering the perfect pairing for every palate and occasion.</p>
             </div>
             <div class="philosophy-card">
-              <div class="philosophy-icon" aria-hidden="true">&#10024;</div>
+              <div class="philosophy-icon" aria-hidden="true">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              </div>
               <h3>Impeccable Service</h3>
               <p>From your first welcome to your last sip, our Thai and English-speaking team delivers attentive, warm service that makes every guest feel truly at home.</p>
             </div>
