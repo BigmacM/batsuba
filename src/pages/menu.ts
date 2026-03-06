@@ -14,10 +14,49 @@ function renderMenuSections(): string {
   const italianIds = ['quick-dishes', 'salads', 'snacks-appetizers', 'japanese', 'soups', 'pasta', 'main-courses', 'pizza', 'steak-meat', 'seafood', 'specials'];
   const thaiIds = ['thai-soups', 'thai-dishes', 'somtam', 'yam', 'fried-vegetable', 'stir-fried', 'beef-pork-salads', 'pork-dishes', 'basil-dishes', 'fried-rice', 'beverages-extras'];
 
-  const renderSection = (cats: typeof MENU_CATEGORIES) => cats.map(cat => `
+  // Map category IDs to their menu page image filenames.
+  // Each category can have 1+ images from the in-store menu photos.
+  // Place images in /images/menu-pages/ named: {category-id}.jpg or {category-id}-2.jpg etc.
+  const categoryImages: Record<string, string[]> = {
+    'quick-dishes':       ['quick-dishes.jpg'],
+    'salads':             ['salads.jpg'],
+    'snacks-appetizers':  ['snacks-appetizers.jpg'],
+    'japanese':           ['japanese.jpg'],
+    'soups':              ['soups.jpg'],
+    'pasta':              ['pasta.jpg'],
+    'main-courses':       ['main-courses.jpg'],
+    'pizza':              ['pizza.jpg'],
+    'steak-meat':         ['steak-meat.jpg'],
+    'seafood':            ['seafood.jpg', 'seafood-2.jpg'],
+    'specials':           ['specials.jpg'],
+    'thai-soups':         ['thai-soups.jpg', 'thai-soups-2.jpg'],
+    'thai-dishes':        ['thai-dishes.jpg', 'thai-dishes-2.jpg'],
+    'somtam':             ['somtam.jpg'],
+    'yam':                ['yam.jpg'],
+    'fried-vegetable':    ['fried-vegetable.jpg'],
+    'stir-fried':         ['stir-fried.jpg'],
+    'beef-pork-salads':   ['beef-pork-salads.jpg'],
+    'pork-dishes':        ['pork-dishes.jpg'],
+    'basil-dishes':       ['basil-dishes.jpg'],
+    'fried-rice':         ['fried-rice.jpg'],
+    'beverages-extras':   ['beverages-extras.jpg'],
+  };
+
+  const renderSection = (cats: typeof MENU_CATEGORIES) => cats.map(cat => {
+    const images = categoryImages[cat.id] || [];
+    const imageStrip = images.length > 0 ? `
+      <div class="menu-section-photos">
+        ${images.map(img => `
+          <img src="/images/menu-pages/${img}" alt="${cat.label} menu" loading="lazy" onerror="this.parentElement.style.display='none'">
+        `).join('')}
+      </div>
+    ` : '';
+
+    return `
     <div class="menu-section" id="${cat.id}" data-category="${cat.id}">
       <h2>${cat.label}</h2>
       ${cat.note ? `<p class="menu-note">${cat.note}</p>` : ''}
+      ${imageStrip}
       <div class="menu-grid">
         ${cat.items.map(item => `
           <div class="menu-item" data-name="${item.name.toLowerCase()}">
@@ -30,7 +69,8 @@ function renderMenuSections(): string {
         `).join('')}
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 
   const italianCats = MENU_CATEGORIES.filter(c => italianIds.includes(c.id));
   const thaiCats = MENU_CATEGORIES.filter(c => thaiIds.includes(c.id));
@@ -123,6 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTracking();
   initAnimations();
   initDragScroll('.category-nav');
+  initDragScroll('.menu-section-photos');
   initMenuInteractions();
   initMenuFab();
 });
