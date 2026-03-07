@@ -53,29 +53,39 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="container">
           <h2 id="locations-heading" class="sr-only">Our Locations</h2>
           <div class="grid-2 animate-fade-up">
-            ${config.locations.map(loc => `
-              <div class="location-card">
-                <h3>${loc.label}</h3>
-                <div class="location-detail">
-                  <span class="detail-icon" aria-hidden="true">${ICONS.mapPin}</span>
-                  <span>${loc.address.full}</span>
+            ${config.locations.map((loc, i) => {
+              const slug = i === 0 ? 'tree-town' : 'aya-hotel';
+              const folder = i === 0 ? 'Batsuba Tree Town' : 'Batsuba Aya Hotel';
+              const mainImg = i === 0 ? 'Batsuba Main.jpg' : 'Batsuba 2 Main.jpg';
+              return `
+              <a href="/${slug}.html" class="location-card location-card-link">
+                <div class="location-card-img">
+                  <picture>
+                    <source srcset="/images/locations/${folder.replace(/ /g, '%20')}/${encodeURIComponent(mainImg).replace('.jpg', '.webp')}" type="image/webp">
+                    <img src="/images/locations/${folder.replace(/ /g, '%20')}/${mainImg.replace(/ /g, '%20')}" alt="${loc.label}" loading="lazy" decoding="async" width="600" height="400">
+                  </picture>
                 </div>
-                <div class="location-detail">
-                  <span class="detail-icon" aria-hidden="true">${ICONS.phone}</span>
-                  <a href="tel:${loc.phone}">${loc.phoneFormatted}</a>
+                <div class="location-card-body">
+                  <h3>${loc.label}</h3>
+                  <div class="location-detail">
+                    <span class="detail-icon" aria-hidden="true">${ICONS.mapPin}</span>
+                    <span>${loc.address.full}</span>
+                  </div>
+                  <div class="location-detail">
+                    <span class="detail-icon" aria-hidden="true">${ICONS.phone}</span>
+                    <span>${loc.phoneFormatted}</span>
+                  </div>
+                  <div class="location-detail">
+                    <span class="detail-icon" aria-hidden="true">${ICONS.clock}</span>
+                    <span>${loc.hours.display} — ${loc.hours.days}</span>
+                  </div>
+                  <div class="location-card-footer">
+                    <div class="rating-badge">${ICONS.star} ${loc.googleRating}/5 (${loc.googleReviewCount} reviews)</div>
+                    <span class="location-card-arrow">View Location &rarr;</span>
+                  </div>
                 </div>
-                <div class="location-detail">
-                  <span class="detail-icon" aria-hidden="true">${ICONS.mail}</span>
-                  <a href="mailto:${loc.email}">${loc.email}</a>
-                </div>
-                <div class="location-detail">
-                  <span class="detail-icon" aria-hidden="true">${ICONS.clock}</span>
-                  <span>${loc.hours.display} — ${loc.hours.days}</span>
-                </div>
-                <div class="rating-badge">${ICONS.star} ${loc.googleRating}/5 (${loc.googleReviewCount} reviews)</div>
-                <a href="${loc.googleMapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="margin-top: 1.5rem; display: inline-flex;">Get Directions</a>
-              </div>
-            `).join('')}
+              </a>`;
+            }).join('')}
           </div>
         </div>
       </section>

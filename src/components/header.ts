@@ -114,7 +114,6 @@ export function renderHeader(): string {
         <a href="/about.html">About</a>
         <a href="/menu.html">Menu</a>
         <a href="/gallery.html">Gallery</a>
-        <a href="/locations.html">Locations</a>
         <a href="/contact.html">Contact</a>
         <a href="/contact.html#reservation" class="nav-reserve">Reserve</a>
       </nav>

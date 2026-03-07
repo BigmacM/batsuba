@@ -98,15 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </section>
 
-      <!-- Search -->
-      <div class="section" style="padding-bottom: 0;">
-        <div class="container">
-          <div class="menu-search">
-            <input type="search" id="menu-search" placeholder="Search dishes..." aria-label="Search menu items">
-          </div>
-        </div>
-      </div>
-
       <!-- Category Nav -->
       <nav class="category-nav" aria-label="Menu categories">
         <div class="category-nav-inner">
@@ -121,39 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
       <!-- Menu Content -->
       <div class="container" id="menu-content">
         ${renderMenuSections()}
-      </div>
-
-      <!-- Floating mobile category selector -->
-      <div class="menu-fab" id="menu-fab" aria-label="Jump to category">
-        <span class="menu-fab-label" id="menu-fab-label">Quick Dishes</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-      </div>
-      <div class="menu-fab-overlay" id="menu-fab-overlay">
-        <div class="menu-fab-sheet">
-          <div class="menu-fab-sheet-header">
-            <span>Jump to Category</span>
-            <button id="menu-fab-close" aria-label="Close">&times;</button>
-          </div>
-          <div class="menu-fab-sheet-list">
-            ${MENU_CATEGORIES.map(cat => `
-              <button class="menu-fab-item" data-target="${cat.id}">${cat.label}</button>
-            `).join('')}
-          </div>
-        </div>
-      </div>
-
-      <!-- Lightbox -->
-      <div class="menu-lightbox" id="menu-lightbox" role="dialog" aria-modal="true" aria-label="Menu photos">
-        <button class="menu-lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
-        <span class="menu-lightbox-title" id="lightbox-title"></span>
-        <span class="menu-lightbox-counter" id="lightbox-counter"></span>
-        <button class="menu-lightbox-nav menu-lightbox-prev" id="lightbox-prev" aria-label="Previous photo">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
-        <img class="menu-lightbox-img" id="lightbox-img" src="" alt="">
-        <button class="menu-lightbox-nav menu-lightbox-next" id="lightbox-next" aria-label="Next photo">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
       </div>
     </main>
     ${renderFooter()}
@@ -171,7 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initAnimations();
   initDragScroll('.category-nav');
   initMenuInteractions();
-  initMenuFab();
   initLightbox();
 });
 
@@ -209,113 +166,64 @@ function initMenuInteractions(): void {
   );
 
   sections.forEach(s => observer.observe(s));
-
-  // Search
-  const searchInput = document.getElementById('menu-search') as HTMLInputElement;
-  if (searchInput) {
-    searchInput.addEventListener('input', () => {
-      const query = searchInput.value.toLowerCase().trim();
-      document.querySelectorAll('.menu-item').forEach(item => {
-        const name = item.getAttribute('data-name') || '';
-        (item as HTMLElement).style.display = !query || name.includes(query) ? '' : 'none';
-      });
-
-      document.querySelectorAll('.menu-section').forEach(section => {
-        const visibleItems = section.querySelectorAll('.menu-item:not([style*="display: none"])');
-        (section as HTMLElement).style.display = visibleItems.length > 0 ? '' : 'none';
-      });
-    });
-  }
-}
-
-function initMenuFab(): void {
-  const fab = document.getElementById('menu-fab');
-  const fabLabel = document.getElementById('menu-fab-label');
-  const overlay = document.getElementById('menu-fab-overlay');
-  const closeBtn = document.getElementById('menu-fab-close');
-
-  if (!fab || !fabLabel || !overlay) return;
-
-  const updateLabel = () => {
-    const active = document.querySelector('.category-pill.active');
-    if (active) {
-      fabLabel.textContent = active.textContent?.trim() || '';
-    }
-  };
-
-  const pillObserver = new MutationObserver(updateLabel);
-  document.querySelectorAll('.category-pill').forEach(pill => {
-    pillObserver.observe(pill, { attributes: true, attributeFilter: ['class'] });
-  });
-
-  fab.addEventListener('click', () => {
-    overlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  });
-
-  const closeOverlay = () => {
-    overlay.classList.remove('open');
-    document.body.style.overflow = '';
-  };
-
-  closeBtn?.addEventListener('click', closeOverlay);
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) closeOverlay();
-  });
-
-  overlay.querySelectorAll('.menu-fab-item').forEach(item => {
-    item.addEventListener('click', () => {
-      const targetId = item.getAttribute('data-target');
-      if (targetId) {
-        const section = document.getElementById(targetId);
-        section?.scrollIntoView({ behavior: 'smooth' });
-      }
-      closeOverlay();
-    });
-  });
 }
 
 function initLightbox(): void {
-  const lightbox = document.getElementById('menu-lightbox');
-  const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
-  const lightboxTitle = document.getElementById('lightbox-title');
-  const lightboxCounter = document.getElementById('lightbox-counter');
-  const closeBtn = document.getElementById('lightbox-close');
-  const prevBtn = document.getElementById('lightbox-prev');
-  const nextBtn = document.getElementById('lightbox-next');
+  // Build lightbox DOM
+  const lb = document.createElement('div');
+  lb.className = 'menu-lightbox';
+  lb.setAttribute('role', 'dialog');
+  lb.setAttribute('aria-modal', 'true');
+  lb.setAttribute('aria-label', 'Menu photos');
+  lb.innerHTML = `
+    <button class="menu-lightbox-close" aria-label="Close">&times;</button>
+    <span class="menu-lightbox-title"></span>
+    <span class="menu-lightbox-counter"></span>
+    <button class="menu-lightbox-nav menu-lightbox-prev" aria-label="Previous photo">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <img class="menu-lightbox-img" src="" alt="">
+    <button class="menu-lightbox-nav menu-lightbox-next" aria-label="Next photo">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  `;
+  document.body.appendChild(lb);
 
-  if (!lightbox || !lightboxImg) return;
+  const lightboxImg = lb.querySelector('.menu-lightbox-img') as HTMLImageElement;
+  const lightboxTitle = lb.querySelector('.menu-lightbox-title') as HTMLElement;
+  const lightboxCounter = lb.querySelector('.menu-lightbox-counter') as HTMLElement;
+  const closeBtn = lb.querySelector('.menu-lightbox-close') as HTMLElement;
+  const prevBtn = lb.querySelector('.menu-lightbox-prev') as HTMLElement;
+  const nextBtn = lb.querySelector('.menu-lightbox-next') as HTMLElement;
 
-  const lb = lightbox;
   let currentImages: string[] = [];
   let currentIndex = 0;
   let currentLabel = '';
 
-  function show(images: string[], label: string, startIndex = 0) {
+  function show(images: string[], label: string) {
     currentImages = images;
     currentLabel = label;
-    currentIndex = startIndex;
+    currentIndex = 0;
     updateImage();
     lb.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
 
-  function close() {
+  function closeLb() {
     lb.classList.remove('open');
     document.body.style.overflow = '';
   }
 
   function updateImage() {
     const img = currentImages[currentIndex];
-    lightboxImg.src = `/images/menu-pages/${encodeURIComponent(img)}`;
+    lightboxImg.src = `/images/menu-pages/${img.replace(/ /g, '%20')}`;
     lightboxImg.alt = `${currentLabel} menu page ${currentIndex + 1}`;
-    if (lightboxTitle) lightboxTitle.textContent = currentLabel;
-    if (lightboxCounter) lightboxCounter.textContent = `${currentIndex + 1} / ${currentImages.length}`;
-
-    // Hide nav buttons if only 1 image
-    if (prevBtn) prevBtn.style.display = currentImages.length <= 1 ? 'none' : '';
-    if (nextBtn) nextBtn.style.display = currentImages.length <= 1 ? 'none' : '';
-    if (lightboxCounter) lightboxCounter.style.display = currentImages.length <= 1 ? 'none' : '';
+    lightboxTitle.textContent = currentLabel;
+    lightboxCounter.textContent = `${currentIndex + 1} / ${currentImages.length}`;
+    const single = currentImages.length <= 1;
+    prevBtn.style.display = single ? 'none' : '';
+    nextBtn.style.display = single ? 'none' : '';
+    lightboxCounter.style.display = single ? 'none' : '';
   }
 
   function next() {
@@ -328,38 +236,35 @@ function initLightbox(): void {
     updateImage();
   }
 
-  // Bind photo buttons
-  document.querySelectorAll<HTMLButtonElement>('.menu-photos-btn[data-lightbox]').forEach(btn => {
-    btn.addEventListener('click', () => {
+  // Bind click directly to each photo button for reliability
+  document.querySelectorAll<HTMLElement>('.menu-photos-btn[data-lightbox]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       const catId = btn.getAttribute('data-lightbox') || '';
       const images = categoryImages[catId];
       if (!images?.length) return;
-      // Find the category label from the heading
       const section = document.getElementById(catId);
-      const heading = section?.querySelector('h2');
-      const label = heading?.childNodes[0]?.textContent?.trim() || catId;
+      const label = section?.querySelector('h2')?.childNodes[0]?.textContent?.trim() || catId;
       show(images, label);
     });
   });
 
-  closeBtn?.addEventListener('click', close);
-  prevBtn?.addEventListener('click', prev);
-  nextBtn?.addEventListener('click', next);
+  closeBtn.addEventListener('click', closeLb);
+  prevBtn.addEventListener('click', (e) => { e.stopPropagation(); prev(); });
+  nextBtn.addEventListener('click', (e) => { e.stopPropagation(); next(); });
 
-  // Click backdrop to close
   lb.addEventListener('click', (e) => {
-    if (e.target === lb) close();
+    if (e.target === lb) closeLb();
   });
 
-  // Keyboard navigation
   document.addEventListener('keydown', (e) => {
     if (!lb.classList.contains('open')) return;
-    if (e.key === 'Escape') close();
+    if (e.key === 'Escape') closeLb();
     if (e.key === 'ArrowRight') next();
     if (e.key === 'ArrowLeft') prev();
   });
 
-  // Swipe support for mobile
   let touchStartX = 0;
   lb.addEventListener('touchstart', (e) => {
     touchStartX = e.touches[0].clientX;

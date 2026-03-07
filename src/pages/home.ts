@@ -28,9 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
     ${renderHeader()}
     <main id="main">
       <!-- Hero -->
-      <section class="hero" aria-label="Welcome to ${config.brand.name}">
+      <section class="hero" aria-label="Welcome to ${config.brand.name}" style="background: url('/images/locations/Batsuba%20Tree%20Town/Batsuba%20Main.jpg') center/cover no-repeat;">
         <div class="hero-overlay"></div>
-        <!-- TODO: Replace with actual hero photo of the restaurant -->
         <div class="hero-content">
           <h1>Where Fine Dining Meets Elegant Wine</h1>
           <p>${config.brand.tagline}</p>
@@ -177,44 +176,54 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>Two locations in Pattaya to serve you</p>
           </div>
           <div class="grid-2 animate-fade-up">
-            ${config.locations.map(loc => `
-              <div class="location-card">
-                <h3>${loc.label}</h3>
-                <div class="location-detail">
-                  <span class="detail-icon" aria-hidden="true">${ICONS.mapPin}</span>
-                  <span>${loc.address.full}</span>
+            ${config.locations.map((loc, i) => {
+              const slug = i === 0 ? 'tree-town' : 'aya-hotel';
+              const folder = i === 0 ? 'Batsuba Tree Town' : 'Batsuba Aya Hotel';
+              const mainImg = i === 0 ? 'Batsuba Main.jpg' : 'Batsuba 2 Main.jpg';
+              return `
+              <a href="/${slug}.html" class="location-card location-card-link">
+                <div class="location-card-img">
+                  <picture>
+                    <source srcset="/images/locations/${folder.replace(/ /g, '%20')}/${mainImg.replace(/ /g, '%20').replace('.jpg', '.webp')}" type="image/webp">
+                    <img src="/images/locations/${folder.replace(/ /g, '%20')}/${mainImg.replace(/ /g, '%20')}" alt="${loc.label}" loading="lazy" decoding="async" width="600" height="400">
+                  </picture>
                 </div>
-                <div class="location-detail">
-                  <span class="detail-icon" aria-hidden="true">${ICONS.phone}</span>
-                  <a href="tel:${loc.phone}">${loc.phoneFormatted}</a>
+                <div class="location-card-body">
+                  <h3>${loc.label}</h3>
+                  <div class="location-detail">
+                    <span class="detail-icon" aria-hidden="true">${ICONS.mapPin}</span>
+                    <span>${loc.address.city}, ${loc.address.district}</span>
+                  </div>
+                  <div class="location-detail">
+                    <span class="detail-icon" aria-hidden="true">${ICONS.clock}</span>
+                    <span>${loc.hours.display}</span>
+                  </div>
+                  <div class="location-card-footer">
+                    <div class="rating-badge">${ICONS.star} ${loc.googleRating}/5 (${loc.googleReviewCount} reviews)</div>
+                    <span class="location-card-arrow">View Location &rarr;</span>
+                  </div>
                 </div>
-                <div class="location-detail">
-                  <span class="detail-icon" aria-hidden="true">${ICONS.clock}</span>
-                  <span>${loc.hours.display} — Daily</span>
-                </div>
-                <div class="rating-badge">${ICONS.star} ${loc.googleRating}/5 (${loc.googleReviewCount} reviews)</div>
-                <a href="${loc.googleMapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="margin-top: 1.5rem; display: inline-flex;">Get Directions</a>
-              </div>
-            `).join('')}
+              </a>`;
+            }).join('')}
           </div>
         </div>
       </section>
 
-      <!-- Instagram Strip -->
-      <section class="section" style="background: var(--color-white); padding-bottom: 0;" aria-labelledby="insta-heading">
+      <!-- Instagram Embed -->
+      <section class="section" style="background: var(--color-white);" aria-labelledby="insta-heading">
         <div class="container">
           <div class="section-header animate-fade-up">
             <h2 id="insta-heading">Follow Us on Instagram</h2>
             <div class="section-divider"></div>
             <p><a href="${config.social.instagram}" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); font-weight: 700;">${config.social.instagramHandle}</a></p>
           </div>
-        </div>
-        <div class="insta-grid">
-          ${Array.from({ length: 6 }, (_, i) => `
-            <a href="${config.social.instagram}" target="_blank" rel="noopener noreferrer" aria-label="Instagram post ${i + 1}">
-              <!-- TODO: Replace with actual Instagram photo ${i + 1} -->
-            </a>
-          `).join('')}
+          <div class="insta-embed animate-fade-up" style="display: flex; justify-content: center;">
+            <blockquote class="instagram-media" data-instgrm-permalink="${config.social.instagram}/" data-instgrm-version="14" style="background: var(--color-white); border: 1px solid var(--color-gray-light); border-radius: var(--radius-md); max-width: 540px; width: 100%; min-width: 326px; padding: 0;">
+            </blockquote>
+          </div>
+          <div style="text-align: center; margin-top: var(--space-4);" class="animate-fade-up">
+            <a href="${config.social.instagram}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">View Our Instagram</a>
+          </div>
         </div>
       </section>
     </main>
@@ -230,4 +239,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initTracking();
   initAnimations();
   initDragScroll('.dish-strip');
+
+  // Load Instagram embed script
+  const igScript = document.createElement('script');
+  igScript.async = true;
+  igScript.src = 'https://www.instagram.com/embed.js';
+  document.body.appendChild(igScript);
 });
