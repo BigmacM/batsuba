@@ -31,7 +31,6 @@ export function initLightbox(id = 'photo-lightbox', itemSelector = '.gallery-ite
   const lbPrev = dialog.querySelector('.lb-prev') as HTMLElement;
   const lbNext = dialog.querySelector('.lb-next') as HTMLElement;
 
-  // Collect all visible image srcs from gallery items
   let srcs: string[] = [];
   let alts: string[] = [];
   let idx = 0;
@@ -40,10 +39,12 @@ export function initLightbox(id = 'photo-lightbox', itemSelector = '.gallery-ite
     srcs = [];
     alts = [];
     document.querySelectorAll<HTMLElement>(itemSelector).forEach(item => {
-      if (item.style.display === 'none') return;
+      if (item.style.display === 'none' || item.offsetParent === null) return;
       const img = item.querySelector('img') as HTMLImageElement | null;
-      if (img && img.src) {
-        srcs.push(img.src);
+      if (img) {
+        // Use the original src attribute to avoid browser URL resolution mismatches
+        const src = img.getAttribute('src') || img.currentSrc || img.src;
+        srcs.push(src);
         alts.push(img.alt || '');
       }
     });
@@ -70,15 +71,17 @@ export function initLightbox(id = 'photo-lightbox', itemSelector = '.gallery-ite
   function next(): void { idx = (idx + 1) % srcs.length; render(); }
   function prev(): void { idx = (idx - 1 + srcs.length) % srcs.length; render(); }
 
-  // Attach click to each gallery item
-  document.querySelectorAll<HTMLElement>(itemSelector).forEach(item => {
+  // Attach click to each gallery item using DOM index
+  const items = document.querySelectorAll<HTMLElement>(itemSelector);
+  items.forEach((item, i) => {
     item.style.cursor = 'pointer';
+    item.setAttribute('data-lb-index', String(i));
     item.addEventListener('click', () => {
-      // Find this item's index among visible items
       collectImages();
-      const img = item.querySelector('img') as HTMLImageElement | null;
-      if (!img) return;
-      const clickedIdx = srcs.indexOf(img.src);
+      // Find the position of this item among visible items
+      const visibleItems = Array.from(document.querySelectorAll<HTMLElement>(itemSelector))
+        .filter(el => el.style.display !== 'none' && el.offsetParent !== null);
+      const clickedIdx = visibleItems.indexOf(item);
       open(clickedIdx >= 0 ? clickedIdx : 0);
     });
   });
