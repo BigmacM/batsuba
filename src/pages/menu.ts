@@ -116,6 +116,20 @@ document.addEventListener('DOMContentLoaded', () => {
     </main>
     ${renderFooter()}
 
+    <!-- Menu Photo Lightbox (native dialog) -->
+    <dialog class="menu-lightbox-dialog" id="menu-lightbox">
+      <button class="lb-close" id="lb-close" aria-label="Close">&times;</button>
+      <span class="lb-title" id="lb-title"></span>
+      <span class="lb-counter" id="lb-counter"></span>
+      <button class="lb-nav lb-prev" id="lb-prev" aria-label="Previous">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <img class="lb-img" id="lb-img" src="" alt="">
+      <button class="lb-nav lb-next" id="lb-next" aria-label="Next">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </dialog>
+
     <script type="application/ld+json">${generateMenuSchema()}</script>
     <script type="application/ld+json">${generateRestaurantSchema()}</script>
     <script type="application/ld+json">${generateBreadcrumbSchema([
@@ -169,112 +183,71 @@ function initMenuInteractions(): void {
 }
 
 function initLightbox(): void {
-  // Build lightbox DOM
-  const lb = document.createElement('div');
-  lb.className = 'menu-lightbox';
-  lb.setAttribute('role', 'dialog');
-  lb.setAttribute('aria-modal', 'true');
-  lb.setAttribute('aria-label', 'Menu photos');
-  lb.innerHTML = `
-    <button class="menu-lightbox-close" aria-label="Close">&times;</button>
-    <span class="menu-lightbox-title"></span>
-    <span class="menu-lightbox-counter"></span>
-    <button class="menu-lightbox-nav menu-lightbox-prev" aria-label="Previous photo">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-    </button>
-    <img class="menu-lightbox-img" src="" alt="">
-    <button class="menu-lightbox-nav menu-lightbox-next" aria-label="Next photo">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-    </button>
-  `;
-  document.body.appendChild(lb);
+  const dialog = document.getElementById('menu-lightbox') as HTMLDialogElement;
+  if (!dialog) return;
 
-  const lightboxImg = lb.querySelector('.menu-lightbox-img') as HTMLImageElement;
-  const lightboxTitle = lb.querySelector('.menu-lightbox-title') as HTMLElement;
-  const lightboxCounter = lb.querySelector('.menu-lightbox-counter') as HTMLElement;
-  const closeBtn = lb.querySelector('.menu-lightbox-close') as HTMLElement;
-  const prevBtn = lb.querySelector('.menu-lightbox-prev') as HTMLElement;
-  const nextBtn = lb.querySelector('.menu-lightbox-next') as HTMLElement;
+  const lbImg = document.getElementById('lb-img') as HTMLImageElement;
+  const lbTitle = document.getElementById('lb-title') as HTMLElement;
+  const lbCounter = document.getElementById('lb-counter') as HTMLElement;
+  const lbClose = document.getElementById('lb-close') as HTMLElement;
+  const lbPrev = document.getElementById('lb-prev') as HTMLElement;
+  const lbNext = document.getElementById('lb-next') as HTMLElement;
 
-  let currentImages: string[] = [];
-  let currentIndex = 0;
-  let currentLabel = '';
+  let images: string[] = [];
+  let idx = 0;
 
-  function show(images: string[], label: string) {
-    currentImages = images;
-    currentLabel = label;
-    currentIndex = 0;
-    updateImage();
-    lb.classList.add('open');
-    document.body.style.overflow = 'hidden';
+  function render() {
+    const file = images[idx];
+    lbImg.src = `/images/menu-pages/${file.replace(/ /g, '%20')}`;
+    lbImg.alt = `${lbTitle.textContent} page ${idx + 1}`;
+    lbCounter.textContent = `${idx + 1} / ${images.length}`;
+    const multi = images.length > 1;
+    lbPrev.style.display = multi ? '' : 'none';
+    lbNext.style.display = multi ? '' : 'none';
+    lbCounter.style.display = multi ? '' : 'none';
   }
 
-  function closeLb() {
-    lb.classList.remove('open');
-    document.body.style.overflow = '';
+  function open(catId: string) {
+    const imgs = categoryImages[catId];
+    if (!imgs?.length) return;
+    images = imgs;
+    idx = 0;
+    const section = document.getElementById(catId);
+    lbTitle.textContent = section?.querySelector('h2')?.childNodes[0]?.textContent?.trim() || catId;
+    render();
+    dialog.showModal();
   }
 
-  function updateImage() {
-    const img = currentImages[currentIndex];
-    lightboxImg.src = `/images/menu-pages/${img.replace(/ /g, '%20')}`;
-    lightboxImg.alt = `${currentLabel} menu page ${currentIndex + 1}`;
-    lightboxTitle.textContent = currentLabel;
-    lightboxCounter.textContent = `${currentIndex + 1} / ${currentImages.length}`;
-    const single = currentImages.length <= 1;
-    prevBtn.style.display = single ? 'none' : '';
-    nextBtn.style.display = single ? 'none' : '';
-    lightboxCounter.style.display = single ? 'none' : '';
-  }
-
-  function next() {
-    currentIndex = (currentIndex + 1) % currentImages.length;
-    updateImage();
-  }
-
-  function prev() {
-    currentIndex = (currentIndex - 1 + currentImages.length) % currentImages.length;
-    updateImage();
-  }
-
-  // Bind click directly to each photo button for reliability
+  // Attach click to each photo button
   document.querySelectorAll<HTMLElement>('.menu-photos-btn[data-lightbox]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const catId = btn.getAttribute('data-lightbox') || '';
-      const images = categoryImages[catId];
-      if (!images?.length) return;
-      const section = document.getElementById(catId);
-      const label = section?.querySelector('h2')?.childNodes[0]?.textContent?.trim() || catId;
-      show(images, label);
+    btn.addEventListener('click', () => {
+      open(btn.getAttribute('data-lightbox') || '');
     });
   });
 
-  closeBtn.addEventListener('click', closeLb);
-  prevBtn.addEventListener('click', (e) => { e.stopPropagation(); prev(); });
-  nextBtn.addEventListener('click', (e) => { e.stopPropagation(); next(); });
+  lbClose.addEventListener('click', () => dialog.close());
+  lbPrev.addEventListener('click', () => { idx = (idx - 1 + images.length) % images.length; render(); });
+  lbNext.addEventListener('click', () => { idx = (idx + 1) % images.length; render(); });
 
-  lb.addEventListener('click', (e) => {
-    if (e.target === lb) closeLb();
+  // Close on backdrop click
+  dialog.addEventListener('click', (e) => {
+    if (e.target === dialog) dialog.close();
   });
 
-  document.addEventListener('keydown', (e) => {
-    if (!lb.classList.contains('open')) return;
-    if (e.key === 'Escape') closeLb();
-    if (e.key === 'ArrowRight') next();
-    if (e.key === 'ArrowLeft') prev();
+  // Keyboard navigation
+  dialog.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') { idx = (idx + 1) % images.length; render(); }
+    if (e.key === 'ArrowLeft') { idx = (idx - 1 + images.length) % images.length; render(); }
   });
 
-  let touchStartX = 0;
-  lb.addEventListener('touchstart', (e) => {
-    touchStartX = e.touches[0].clientX;
-  }, { passive: true });
-
-  lb.addEventListener('touchend', (e) => {
-    const diff = touchStartX - e.changedTouches[0].clientX;
+  // Swipe support
+  let touchX = 0;
+  dialog.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+  dialog.addEventListener('touchend', (e) => {
+    const diff = touchX - e.changedTouches[0].clientX;
     if (Math.abs(diff) > 50) {
-      if (diff > 0) next();
-      else prev();
+      idx = diff > 0 ? (idx + 1) % images.length : (idx - 1 + images.length) % images.length;
+      render();
     }
   });
 }
