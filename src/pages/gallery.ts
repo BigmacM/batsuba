@@ -4,22 +4,24 @@ import { renderFooter } from '../components/footer';
 import { generateBreadcrumbSchema } from '../utils/seo';
 import { initTracking } from '../components/tracking';
 import { initAnimations } from '../utils/animations';
+import { renderLightbox, initLightbox } from '../utils/lightbox';
 
 const config = SITE_CONFIG;
 
+// Gallery uses location photos that already exist on disk
 const galleryItems = [
-  { label: 'Wood-fired Pizza', category: 'food' },
-  { label: 'Wagyu Steak', category: 'food' },
-  { label: 'Pasta Selection', category: 'food' },
-  { label: 'Wine Collection', category: 'wine' },
-  { label: 'Wine Pairing', category: 'wine' },
-  { label: 'Sommelier Selection', category: 'wine' },
-  { label: 'Restaurant Interior', category: 'atmosphere' },
-  { label: 'Outdoor Dining', category: 'atmosphere' },
-  { label: 'Evening Ambience', category: 'atmosphere' },
-  { label: 'Margherita Pizza', category: 'pizza' },
-  { label: 'Truffle Pizza', category: 'pizza' },
-  { label: 'Four Cheese Pizza', category: 'pizza' },
+  { src: '/images/locations/Batsuba%20Tree%20Town/Batsuba%201%20(2).jpg', webp: '/images/locations/Batsuba%20Tree%20Town/Batsuba%201%20(2).webp', label: 'Tree Town Pattaya', category: 'atmosphere' },
+  { src: '/images/locations/Batsuba%20Tree%20Town/Batsuba%201%20(3).jpg', webp: '/images/locations/Batsuba%20Tree%20Town/Batsuba%201%20(3).webp', label: 'Tree Town Interior', category: 'atmosphere' },
+  { src: '/images/locations/Batsuba%20Tree%20Town/Batsuba%201%20(4).jpg', webp: '/images/locations/Batsuba%20Tree%20Town/Batsuba%201%20(4).webp', label: 'Tree Town Dining', category: 'atmosphere' },
+  { src: '/images/locations/Batsuba%20Tree%20Town/Batsuba%201%20(5).jpg', webp: '/images/locations/Batsuba%20Tree%20Town/Batsuba%201%20(5).webp', label: 'Tree Town Ambience', category: 'atmosphere' },
+  { src: '/images/locations/Batsuba%20Tree%20Town/Batsuba%201%20(6).jpg', webp: '/images/locations/Batsuba%20Tree%20Town/Batsuba%201%20(6).webp', label: 'Tree Town Evening', category: 'atmosphere' },
+  { src: '/images/locations/Batsuba%20Tree%20Town/Batsuba%201%20(7).jpg', webp: '/images/locations/Batsuba%20Tree%20Town/Batsuba%201%20(7).webp', label: 'Tree Town Setting', category: 'atmosphere' },
+  { src: '/images/locations/Batsuba%20Aya%20Hotel/Batsuba%202%20(1).jpg', webp: '/images/locations/Batsuba%20Aya%20Hotel/Batsuba%202%20(1).webp', label: 'Aya Hotel Location', category: 'atmosphere' },
+  { src: '/images/locations/Batsuba%20Aya%20Hotel/Batsuba%202%20(2).jpg', webp: '/images/locations/Batsuba%20Aya%20Hotel/Batsuba%202%20(2).webp', label: 'Aya Hotel Interior', category: 'atmosphere' },
+  { src: '/images/locations/Batsuba%20Aya%20Hotel/Batsuba%202%20(3).jpg', webp: '/images/locations/Batsuba%20Aya%20Hotel/Batsuba%202%20(3).webp', label: 'Aya Hotel Dining', category: 'atmosphere' },
+  { src: '/images/locations/Batsuba%20Aya%20Hotel/Batsuba%202%20(4).jpg', webp: '/images/locations/Batsuba%20Aya%20Hotel/Batsuba%202%20(4).webp', label: 'Aya Hotel Ambience', category: 'atmosphere' },
+  { src: '/images/locations/Batsuba%20Aya%20Hotel/Batsuba%202%20(5).jpg', webp: '/images/locations/Batsuba%20Aya%20Hotel/Batsuba%202%20(5).webp', label: 'Aya Hotel Evening', category: 'atmosphere' },
+  { src: '/images/locations/Batsuba%20Aya%20Hotel/Batsuba%202%20(6).jpg', webp: '/images/locations/Batsuba%20Aya%20Hotel/Batsuba%202%20(6).webp', label: 'Aya Hotel Terrace', category: 'atmosphere' },
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -42,23 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="container">
           <h2 id="gallery-heading" class="sr-only">Gallery</h2>
 
-          <!-- Tabs -->
-          <div class="gallery-tabs animate-fade-up">
-            <button class="gallery-tab active" data-filter="all">All</button>
-            <button class="gallery-tab" data-filter="food">Food</button>
-            <button class="gallery-tab" data-filter="wine">Wine</button>
-            <button class="gallery-tab" data-filter="atmosphere">Atmosphere</button>
-            <button class="gallery-tab" data-filter="pizza">Pizza</button>
-          </div>
-
           <!-- Grid -->
           <div class="gallery-grid animate-fade-up" id="gallery-grid">
-            ${galleryItems.map((item, i) => `
-              <div class="gallery-item" data-category="${item.category}" data-index="${i}" role="button" tabindex="0" aria-label="View ${item.label}">
-                <div class="img-placeholder img-placeholder-square">
-                  <!-- TODO: Replace with actual photo of ${item.label} -->
-                  ${item.label}
-                </div>
+            ${galleryItems.map(item => `
+              <div class="gallery-item" data-category="${item.category}">
+                <picture>
+                  <source srcset="${item.webp}" type="image/webp">
+                  <img src="${item.src}" alt="${item.label}" loading="lazy" decoding="async" width="800" height="600" onerror="this.closest('.gallery-item').style.display='none'">
+                </picture>
               </div>
             `).join('')}
           </div>
@@ -73,13 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     </main>
     ${renderFooter()}
 
-    <!-- Lightbox -->
-    <div class="lightbox" id="lightbox" role="dialog" aria-label="Image viewer">
-      <button class="lightbox-close" aria-label="Close lightbox">&times;</button>
-      <div class="lightbox-content">
-        <div class="img-placeholder" id="lightbox-image" style="min-height: 20rem; width: 100%; border-radius: var(--radius-md);"></div>
-      </div>
-    </div>
+    ${renderLightbox('gallery-lightbox')}
 
     <script type="application/ld+json">${JSON.stringify({
       '@context': 'https://schema.org',
@@ -96,58 +83,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeader();
   initTracking();
   initAnimations();
-  initGallery();
+  initLightbox('gallery-lightbox');
 });
-
-function initGallery(): void {
-  // Tab filtering
-  const tabs = document.querySelectorAll('.gallery-tab');
-  const items = document.querySelectorAll('.gallery-item');
-
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      const filter = tab.getAttribute('data-filter');
-
-      items.forEach(item => {
-        const cat = item.getAttribute('data-category');
-        (item as HTMLElement).style.display = filter === 'all' || cat === filter ? '' : 'none';
-      });
-    });
-  });
-
-  // Lightbox
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImage = document.getElementById('lightbox-image');
-  const closeBtn = lightbox?.querySelector('.lightbox-close');
-
-  items.forEach(item => {
-    const openLightbox = () => {
-      if (lightbox && lightboxImage) {
-        const label = item.querySelector('.img-placeholder')?.textContent?.trim() || '';
-        lightboxImage.textContent = label;
-        lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      }
-    };
-
-    item.addEventListener('click', openLightbox);
-    item.addEventListener('keydown', (e) => {
-      if ((e as KeyboardEvent).key === 'Enter') openLightbox();
-    });
-  });
-
-  const closeLightbox = () => {
-    lightbox?.classList.remove('active');
-    document.body.style.overflow = '';
-  };
-
-  closeBtn?.addEventListener('click', closeLightbox);
-  lightbox?.addEventListener('click', (e) => {
-    if (e.target === lightbox) closeLightbox();
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeLightbox();
-  });
-}

@@ -6,6 +6,7 @@ import { generateBreadcrumbSchema } from '../utils/seo';
 import { initTracking } from '../components/tracking';
 import { initAnimations } from '../utils/animations';
 import { ICONS } from '../utils/icons';
+import { renderLightbox, initLightbox } from '../utils/lightbox';
 
 const config = SITE_CONFIG;
 const loc = config.locations[1]; // Near Aya Boutique Hotel
@@ -167,6 +168,8 @@ document.addEventListener('DOMContentLoaded', () => {
     </main>
     ${renderFooter()}
 
+    ${renderLightbox('aya-lightbox')}
+
     <script type="application/ld+json">${generateSingleLocationSchema(1)}</script>
     <script type="application/ld+json">${generateBreadcrumbSchema([
       { name: 'Home', url: '/' },
@@ -178,4 +181,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeader();
   initTracking();
   initAnimations();
+  initLightbox('aya-lightbox');
 });
