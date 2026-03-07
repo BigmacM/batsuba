@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ${renderHeader()}
     <main id="main">
       <!-- Hero -->
-      <section class="hero hero-page" aria-label="${loc.label}">
+      <section class="hero hero-page hero-page-img" aria-label="${loc.label}" style="background-image: url('/images/locations/${encodeURIComponent('Batsuba Tree Town')}/${encodeURIComponent('Batsuba Main.jpg')}');">
         <div class="hero-overlay"></div>
         <div class="hero-content">
           <h1>${loc.label}</h1>
@@ -79,9 +79,12 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>A glimpse of the atmosphere at Tree Town</p>
           </div>
           <div class="gallery-grid animate-fade-up">
-            ${[1, 2, 3, 4, 5, 6].map(i => `
+            ${[2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => `
               <div class="gallery-item">
-                <img src="/images/locations/tree-town-${i}.jpg" alt="Tree Town Pattaya interior ${i}" loading="lazy" onerror="this.closest('.gallery-item').style.display='none'">
+                <picture>
+                  <source srcset="/images/locations/${encodeURIComponent('Batsuba Tree Town')}/${encodeURIComponent(`Batsuba 1 (${i}).webp`)}" type="image/webp">
+                  <img src="/images/locations/${encodeURIComponent('Batsuba Tree Town')}/${encodeURIComponent(`Batsuba 1 (${i}).jpg`)}" alt="BUTSABA Tree Town Pattaya ${i}" loading="lazy" decoding="async" width="800" height="600" onerror="this.closest('.gallery-item').style.display='none'">
+                </picture>
               </div>
             `).join('')}
           </div>
