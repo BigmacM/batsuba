@@ -28,9 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
     ${renderHeader()}
     <main id="main">
       <!-- Hero -->
-      <section class="hero" aria-label="Welcome to ${config.brand.name}">
+      <section class="hero" aria-label="Welcome to ${config.brand.name}" style="background: url('/images/locations/Batsuba%20Tree%20Town/Batsuba%20Main.jpg') center/cover no-repeat;">
         <div class="hero-overlay"></div>
-        <!-- TODO: Replace with actual hero photo of the restaurant -->
         <div class="hero-content">
           <h1>Where Fine Dining Meets Elegant Wine</h1>
           <p>${config.brand.tagline}</p>
@@ -210,21 +209,21 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </section>
 
-      <!-- Instagram Strip -->
-      <section class="section" style="background: var(--color-white); padding-bottom: 0;" aria-labelledby="insta-heading">
+      <!-- Instagram Embed -->
+      <section class="section" style="background: var(--color-white);" aria-labelledby="insta-heading">
         <div class="container">
           <div class="section-header animate-fade-up">
             <h2 id="insta-heading">Follow Us on Instagram</h2>
             <div class="section-divider"></div>
             <p><a href="${config.social.instagram}" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); font-weight: 700;">${config.social.instagramHandle}</a></p>
           </div>
-        </div>
-        <div class="insta-grid">
-          ${Array.from({ length: 6 }, (_, i) => `
-            <a href="${config.social.instagram}" target="_blank" rel="noopener noreferrer" aria-label="Instagram post ${i + 1}">
-              <img src="/images/instagram/instagram-${i + 1}.jpg" alt="BUTSABA Instagram post ${i + 1}" loading="lazy" decoding="async" width="400" height="400" onerror="this.style.display='none'">
-            </a>
-          `).join('')}
+          <div class="insta-embed animate-fade-up" style="display: flex; justify-content: center;">
+            <blockquote class="instagram-media" data-instgrm-permalink="${config.social.instagram}/" data-instgrm-version="14" style="background: var(--color-white); border: 1px solid var(--color-gray-light); border-radius: var(--radius-md); max-width: 540px; width: 100%; min-width: 326px; padding: 0;">
+            </blockquote>
+          </div>
+          <div style="text-align: center; margin-top: var(--space-4);" class="animate-fade-up">
+            <a href="${config.social.instagram}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">View Our Instagram</a>
+          </div>
         </div>
       </section>
     </main>
@@ -240,4 +239,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initTracking();
   initAnimations();
   initDragScroll('.dish-strip');
+
+  // Load Instagram embed script
+  const igScript = document.createElement('script');
+  igScript.async = true;
+  igScript.src = 'https://www.instagram.com/embed.js';
+  document.body.appendChild(igScript);
 });

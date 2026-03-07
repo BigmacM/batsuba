@@ -79,14 +79,19 @@ document.addEventListener('DOMContentLoaded', () => {
             <p>A glimpse of the atmosphere at Tree Town</p>
           </div>
           <div class="gallery-grid animate-fade-up">
-            ${[2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => `
+            ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map(i => {
+              const base = `/images/locations/Batsuba%20Tree%20Town/Batsuba%201%20(${i})`;
+              const hasWebp = [1,2,3,4,5,6,7,8,9,10].includes(i);
+              const hasJpg = [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16].includes(i);
+              const fallbackSrc = hasJpg ? `${base}.jpg` : `${base}.webp`;
+              return `
               <div class="gallery-item">
                 <picture>
-                  <source srcset="/images/locations/${'Batsuba%20Tree%20Town'}/${`Batsuba%201%20(${i}).webp`}" type="image/webp">
-                  <img src="/images/locations/${'Batsuba%20Tree%20Town'}/${`Batsuba%201%20(${i}).jpg`}" alt="BUTSABA Tree Town Pattaya ${i}" loading="lazy" decoding="async" width="800" height="600" onerror="this.closest('.gallery-item').style.display='none'">
+                  ${hasWebp ? `<source srcset="${base}.webp" type="image/webp">` : ''}
+                  <img src="${fallbackSrc}" alt="BUTSABA Tree Town Pattaya ${i}" loading="lazy" decoding="async" width="800" height="600" onerror="this.closest('.gallery-item').style.display='none'">
                 </picture>
-              </div>
-            `).join('')}
+              </div>`;
+            }).join('')}
           </div>
         </div>
       </section>

@@ -98,15 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </section>
 
-      <!-- Search -->
-      <div class="section" style="padding-bottom: 0;">
-        <div class="container">
-          <div class="menu-search">
-            <input type="search" id="menu-search" placeholder="Search dishes..." aria-label="Search menu items">
-          </div>
-        </div>
-      </div>
-
       <!-- Category Nav -->
       <nav class="category-nav" aria-label="Menu categories">
         <div class="category-nav-inner">
@@ -175,27 +166,10 @@ function initMenuInteractions(): void {
   );
 
   sections.forEach(s => observer.observe(s));
-
-  // Search
-  const searchInput = document.getElementById('menu-search') as HTMLInputElement;
-  if (searchInput) {
-    searchInput.addEventListener('input', () => {
-      const query = searchInput.value.toLowerCase().trim();
-      document.querySelectorAll('.menu-item').forEach(item => {
-        const name = item.getAttribute('data-name') || '';
-        (item as HTMLElement).style.display = !query || name.includes(query) ? '' : 'none';
-      });
-
-      document.querySelectorAll('.menu-section').forEach(section => {
-        const visibleItems = section.querySelectorAll('.menu-item:not([style*="display: none"])');
-        (section as HTMLElement).style.display = visibleItems.length > 0 ? '' : 'none';
-      });
-    });
-  }
 }
 
 function initLightbox(): void {
-  // Create lightbox element dynamically on document.body so it's outside the app innerHTML
+  // Build lightbox DOM
   const lb = document.createElement('div');
   lb.className = 'menu-lightbox';
   lb.setAttribute('role', 'dialog');
@@ -235,14 +209,13 @@ function initLightbox(): void {
     document.body.style.overflow = 'hidden';
   }
 
-  function close() {
+  function closeLb() {
     lb.classList.remove('open');
     document.body.style.overflow = '';
   }
 
   function updateImage() {
     const img = currentImages[currentIndex];
-    // Only encode spaces — encodeURIComponent over-encodes parentheses which breaks some servers
     lightboxImg.src = `/images/menu-pages/${img.replace(/ /g, '%20')}`;
     lightboxImg.alt = `${currentLabel} menu page ${currentIndex + 1}`;
     lightboxTitle.textContent = currentLabel;
@@ -263,32 +236,31 @@ function initLightbox(): void {
     updateImage();
   }
 
-  // Use event delegation on document for photo buttons (more reliable than querying after innerHTML)
-  document.addEventListener('click', (e) => {
-    const btn = (e.target as HTMLElement).closest('.menu-photos-btn[data-lightbox]') as HTMLElement | null;
-    if (!btn) return;
-    e.preventDefault();
-    e.stopPropagation();
-    const catId = btn.getAttribute('data-lightbox') || '';
-    const images = categoryImages[catId];
-    if (!images?.length) return;
-    const section = document.getElementById(catId);
-    const heading = section?.querySelector('h2');
-    const label = heading?.childNodes[0]?.textContent?.trim() || catId;
-    show(images, label);
+  // Bind click directly to each photo button for reliability
+  document.querySelectorAll<HTMLElement>('.menu-photos-btn[data-lightbox]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const catId = btn.getAttribute('data-lightbox') || '';
+      const images = categoryImages[catId];
+      if (!images?.length) return;
+      const section = document.getElementById(catId);
+      const label = section?.querySelector('h2')?.childNodes[0]?.textContent?.trim() || catId;
+      show(images, label);
+    });
   });
 
-  closeBtn.addEventListener('click', close);
-  prevBtn.addEventListener('click', prev);
-  nextBtn.addEventListener('click', next);
+  closeBtn.addEventListener('click', closeLb);
+  prevBtn.addEventListener('click', (e) => { e.stopPropagation(); prev(); });
+  nextBtn.addEventListener('click', (e) => { e.stopPropagation(); next(); });
 
   lb.addEventListener('click', (e) => {
-    if (e.target === lb) close();
+    if (e.target === lb) closeLb();
   });
 
   document.addEventListener('keydown', (e) => {
     if (!lb.classList.contains('open')) return;
-    if (e.key === 'Escape') close();
+    if (e.key === 'Escape') closeLb();
     if (e.key === 'ArrowRight') next();
     if (e.key === 'ArrowLeft') prev();
   });
