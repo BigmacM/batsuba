@@ -242,7 +242,8 @@ function initLightbox(): void {
 
   function updateImage() {
     const img = currentImages[currentIndex];
-    lightboxImg.src = `/images/menu-pages/${encodeURIComponent(img)}`;
+    // Only encode spaces — encodeURIComponent over-encodes parentheses which breaks some servers
+    lightboxImg.src = `/images/menu-pages/${img.replace(/ /g, '%20')}`;
     lightboxImg.alt = `${currentLabel} menu page ${currentIndex + 1}`;
     lightboxTitle.textContent = currentLabel;
     lightboxCounter.textContent = `${currentIndex + 1} / ${currentImages.length}`;

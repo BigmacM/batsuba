@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ${renderHeader()}
     <main id="main">
       <!-- Hero -->
-      <section class="hero hero-page hero-page-img" aria-label="${loc.label}" style="background-image: url('/images/locations/${encodeURIComponent('Batsuba Aya Hotel')}/${encodeURIComponent('Batsuba 2 Main.jpg')}');">
+      <section class="hero hero-page hero-page-img" aria-label="${loc.label}" style="background-image: url('/images/locations/${'Batsuba%20Aya%20Hotel'}/${'Batsuba%202%20Main.jpg'}');">
         <div class="hero-overlay"></div>
         <div class="hero-content">
           <h1>${loc.label}</h1>
@@ -86,8 +86,8 @@ document.addEventListener('DOMContentLoaded', () => {
             ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map(i => `
               <div class="gallery-item">
                 <picture>
-                  <source srcset="/images/locations/${encodeURIComponent('Batsuba Aya Hotel')}/${encodeURIComponent(`Batsuba 2 (${i}).webp`)}" type="image/webp">
-                  <img src="/images/locations/${encodeURIComponent('Batsuba Aya Hotel')}/${encodeURIComponent(`Batsuba 2 (${i}).jpg`)}" alt="BUTSABA near Aya Hotel ${i}" loading="lazy" decoding="async" width="800" height="600" onerror="this.closest('.gallery-item').style.display='none'">
+                  <source srcset="/images/locations/${'Batsuba%20Aya%20Hotel'}/${`Batsuba%202%20(${i}).webp`}" type="image/webp">
+                  <img src="/images/locations/${'Batsuba%20Aya%20Hotel'}/${`Batsuba%202%20(${i}).jpg`}" alt="BUTSABA near Aya Hotel ${i}" loading="lazy" decoding="async" width="800" height="600" onerror="this.closest('.gallery-item').style.display='none'">
                 </picture>
               </div>
             `).join('')}

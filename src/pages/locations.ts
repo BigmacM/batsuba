@@ -61,8 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
               <a href="/${slug}.html" class="location-card location-card-link">
                 <div class="location-card-img">
                   <picture>
-                    <source srcset="/images/locations/${encodeURIComponent(folder)}/${encodeURIComponent(mainImg).replace('.jpg', '.webp')}" type="image/webp">
-                    <img src="/images/locations/${encodeURIComponent(folder)}/${encodeURIComponent(mainImg)}" alt="${loc.label}" loading="lazy" decoding="async" width="600" height="400">
+                    <source srcset="/images/locations/${folder.replace(/ /g, '%20')}/${encodeURIComponent(mainImg).replace('.jpg', '.webp')}" type="image/webp">
+                    <img src="/images/locations/${folder.replace(/ /g, '%20')}/${mainImg.replace(/ /g, '%20')}" alt="${loc.label}" loading="lazy" decoding="async" width="600" height="400">
                   </picture>
                 </div>
                 <div class="location-card-body">
