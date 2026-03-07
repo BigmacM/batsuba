@@ -37,9 +37,11 @@ document.addEventListener('DOMContentLoaded', () => {
               <p>Our kitchen marries the time-honoured traditions of Italian cooking with the bold, aromatic flavors of Thailand and the refined precision of Japanese cuisine. Each plate is a celebration of quality ingredients, prepared with care by our team of Italian and Thai-trained chefs who share a deep respect for culinary heritage.</p>
               <p>At the heart of the experience is our carefully curated wine collection — over two hundred bottles sourced from renowned vineyards around the world, chosen to complement every course and occasion.</p>
             </div>
-            <div class="img-placeholder img-placeholder-food" style="min-height: 24rem; border-radius: var(--radius-md);">
-              <!-- TODO: Replace with actual photo of the restaurant interior -->
-              Restaurant Interior
+            <div style="min-height: 24rem; border-radius: var(--radius-md); overflow: hidden;">
+              <picture>
+                <source srcset="/images/locations/Batsuba%20Tree%20Town/Batsuba%201%20(2).webp" type="image/webp">
+                <img src="/images/locations/Batsuba%20Tree%20Town/Batsuba%201%20(2).jpg" alt="BUTSABA Wine & Cafe Interior" loading="lazy" decoding="async" width="800" height="600" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-md);">
+              </picture>
             </div>
           </div>
         </div>
@@ -82,9 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
       <section class="section" aria-labelledby="wine-heading">
         <div class="container">
           <div class="grid-2 animate-fade-up">
-            <div class="img-placeholder img-placeholder-food" style="min-height: 20rem; border-radius: var(--radius-md);">
-              <!-- TODO: Replace with actual photo of wine collection -->
-              Wine Collection
+            <div style="min-height: 20rem; border-radius: var(--radius-md); overflow: hidden;">
+              <img src="/images/locations/Batsuba%20Tree%20Town/Batsuba%201%20(13).jpg" alt="BUTSABA Wine Collection" loading="lazy" decoding="async" width="800" height="600" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-md);">
             </div>
             <div>
               <h2 id="wine-heading" style="color: var(--color-primary); margin-bottom: 1rem;">Over 200 Wines, Perfectly Paired</h2>
