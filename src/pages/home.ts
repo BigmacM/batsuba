@@ -12,12 +12,12 @@ const loc1 = config.locations[0];
 const loc2 = config.locations[1];
 
 const featuredDishes = [
-  { name: 'Wagyu Fillet Steak 250g', price: 890, category: 'Steak & Meat' },
-  { name: 'Truffle Pizza', price: 380, category: 'Pizza' },
-  { name: 'Pescatore', price: 350, category: 'Pasta' },
-  { name: 'Tuna Tataki', price: 490, category: 'Salads' },
-  { name: 'Tom Yam Kung', price: 290, category: 'Thai Soups' },
-  { name: 'Spaghetti Burrata', price: 420, category: 'Pasta' },
+  { name: 'Wagyu Fillet Steak 250g', price: 890, category: 'Steak & Meat', img: '/images/menu/Wagyu%20Fillet%20Steak.jpg' },
+  { name: 'Truffle Pizza', price: 380, category: 'Pizza', img: '/images/menu/Rustic%20Truffle%20Pizza.jpg' },
+  { name: 'Pescatore', price: 350, category: 'Pasta', img: '/images/menu/Spaghetti%20Pescatore.jpg' },
+  { name: 'Tuna Tataki', price: 490, category: 'Salads', img: '/images/menu/Seared%20Tuna%20Tataki.jpg' },
+  { name: 'Tom Yam Kung', price: 290, category: 'Thai Soups', img: '/images/menu/Vibrant%20Tom%20Yum%20Kung.jpg' },
+  { name: 'Spaghetti Burrata', price: 420, category: 'Pasta', img: '/images/menu/Spaghetti%20with%20Creamy%20Burrata.jpg' },
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -82,10 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="dish-strip">
             ${featuredDishes.map(dish => `
               <div class="dish-card">
-                <div class="img-placeholder img-placeholder-food">
-                  <!-- TODO: Replace with actual photo of ${dish.name} -->
-                  ${dish.name}
-                </div>
+                <img src="${dish.img}" alt="${dish.name}" loading="lazy" decoding="async" width="400" height="300" style="width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: var(--radius-md) var(--radius-md) 0 0;">
                 <div class="card-body">
                   <div class="dish-name">${dish.name}</div>
                   <div class="dish-price">฿${dish.price}</div>
