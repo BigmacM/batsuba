@@ -67,66 +67,24 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             </div>
 
-            <!-- Right: Reservation Form -->
-            <div>
-              <h3 style="color: var(--color-primary); margin-bottom: var(--space-4);">Make a Reservation</h3>
-              <form class="contact-form" id="reservation-form" novalidate>
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="name">Name *</label>
-                    <input type="text" id="name" name="name" required aria-required="true" placeholder="Your name">
-                  </div>
-                  <div class="form-group">
-                    <label for="email">Email *</label>
-                    <input type="email" id="email" name="email" required aria-required="true" placeholder="your@email.com">
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="phone">Phone</label>
-                    <input type="tel" id="phone" name="phone" placeholder="+66 ...">
-                  </div>
-                  <div class="form-group">
-                    <label for="location">Preferred Location *</label>
-                    <select id="location" name="location" required aria-required="true">
-                      <option value="">Select location</option>
-                      ${config.locations.map(loc => `
-                        <option value="${loc.id}">${loc.label}</option>
-                      `).join('')}
-                    </select>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="date">Date *</label>
-                    <input type="date" id="date" name="date" required aria-required="true">
-                  </div>
-                  <div class="form-group">
-                    <label for="time">Time *</label>
-                    <input type="time" id="time" name="time" required aria-required="true">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="party-size">Party Size *</label>
-                  <select id="party-size" name="party-size" required aria-required="true">
-                    <option value="">Select party size</option>
-                    ${Array.from({ length: 10 }, (_, i) => `<option value="${i + 1}">${i + 1} ${i === 0 ? 'guest' : 'guests'}</option>`).join('')}
-                    <option value="11+">11+ guests</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="message">Message</label>
-                  <textarea id="message" name="message" placeholder="Special requests, dietary requirements, celebrations..."></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; gap: 0.5rem;">
-                  ${ICONS.line} Send via LINE
-                </button>
-              </form>
-
-              <div class="form-success" id="form-success">
-                <h3>Redirecting to LINE...</h3>
-                <p style="color: var(--color-text-muted);">Your reservation request is being sent via LINE. If it didn't open automatically, <a href="#" id="line-link" target="_blank" rel="noopener noreferrer" style="color: var(--color-primary); font-weight: 700;">click here</a>.</p>
-                <button class="btn btn-outline" id="form-reset" style="margin-top: 1rem; color: var(--color-primary); border-color: var(--color-primary);">Make Another Reservation</button>
+            <!-- Right: Reservation via LINE -->
+            <div style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: var(--space-6); background: var(--color-white); border-radius: var(--radius-md); border: 1px solid var(--color-gray-light);">
+              <div style="width: 4rem; height: 4rem; border-radius: 50%; background: #06C755; display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-3); color: white;">
+                ${ICONS.line}
+              </div>
+              <h3 style="color: var(--color-primary); margin-bottom: var(--space-2);">Reserve via LINE</h3>
+              <p style="color: var(--color-text-muted); margin-bottom: var(--space-4); max-width: 24rem;">Message us directly on LINE to make a reservation, ask about our menu, or plan your next visit. We'll reply promptly!</p>
+              <a href="${config.social.line}" target="_blank" rel="noopener noreferrer" class="btn btn-accent" style="font-size: 1.125rem; padding: 0.875rem 2.5rem; gap: 0.5rem; background: #06C755; border-color: #06C755;">
+                ${ICONS.line} Chat on LINE
+              </a>
+              <p style="color: var(--color-text-muted); font-size: 0.875rem; margin-top: var(--space-3);">Or call us directly:</p>
+              <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: var(--space-1);">
+                ${config.locations.map(loc => `
+                  <a href="tel:${loc.phone}" style="color: var(--color-primary); font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="detail-icon" aria-hidden="true">${ICONS.phone}</span>
+                    ${loc.label}: ${loc.phoneFormatted}
+                  </a>
+                `).join('')}
               </div>
             </div>
           </div>
@@ -150,69 +108,4 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeader();
   initTracking();
   initAnimations();
-  initForm();
 });
-
-function initForm(): void {
-  const form = document.getElementById('reservation-form') as HTMLFormElement;
-  const success = document.getElementById('form-success');
-  const resetBtn = document.getElementById('form-reset');
-  const lineLink = document.getElementById('line-link') as HTMLAnchorElement;
-
-  if (form && success) {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      if (!form.checkValidity()) {
-        form.reportValidity();
-        return;
-      }
-
-      const data = new FormData(form);
-      const name = data.get('name') as string;
-      const email = data.get('email') as string;
-      const phone = data.get('phone') as string;
-      const locationId = data.get('location') as string;
-      const date = data.get('date') as string;
-      const time = data.get('time') as string;
-      const partySize = data.get('party-size') as string;
-      const message = data.get('message') as string;
-
-      const locationLabel = config.locations.find(l => l.id === locationId)?.label || locationId;
-
-      const lines = [
-        `Reservation Request — BUTSABA Wine & Cafe`,
-        ``,
-        `Name: ${name}`,
-        `Email: ${email}`,
-        phone ? `Phone: ${phone}` : '',
-        `Location: ${locationLabel}`,
-        `Date: ${date}`,
-        `Time: ${time}`,
-        `Party Size: ${partySize}`,
-        message ? `Message: ${message}` : '',
-      ].filter(Boolean).join('\n');
-
-      // LINE share URL — works on mobile/desktop, opens LINE with pre-filled text
-      const lineUrl = `https://line.me/R/share?text=${encodeURIComponent(lines)}`;
-
-      // Update fallback link
-      if (lineLink) {
-        lineLink.href = lineUrl;
-      }
-
-      // Show success and open LINE
-      form.style.display = 'none';
-      success.classList.add('show');
-      window.open(lineUrl, '_blank');
-    });
-  }
-
-  resetBtn?.addEventListener('click', () => {
-    if (form && success) {
-      form.reset();
-      form.style.display = '';
-      success.classList.remove('show');
-    }
-  });
-}
