@@ -115,7 +115,7 @@ export function renderHeader(): string {
         <a href="/menu.html">Menu</a>
         <a href="/gallery.html">Gallery</a>
         <a href="/contact.html">Contact</a>
-        <a href="/contact.html#reservation" class="nav-reserve">Reserve</a>
+        <a href="${SITE_CONFIG.social.line}" target="_blank" rel="noopener noreferrer" class="nav-reserve">Reserve</a>
       </nav>
       <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
         <span></span>

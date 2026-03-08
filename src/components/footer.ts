@@ -20,9 +20,9 @@ export function renderFooter(): string {
     <a href="tel:${loc1.phone}" class="mobile-nav-item mobile-nav-call" aria-label="Call us">
       ${ICONS.phone}
     </a>
-    <a href="/contact.html#reservation" class="mobile-nav-item">
-      ${ICONS.mail}
-      <span>Contact</span>
+    <a href="${config.social.line}" target="_blank" rel="noopener noreferrer" class="mobile-nav-item">
+      ${ICONS.line}
+      <span>Reserve</span>
     </a>
     <a href="/locations.html" class="mobile-nav-item">
       ${ICONS.map}

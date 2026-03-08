@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <p>${config.brand.tagline}</p>
           <div class="hero-ctas">
             <a href="/menu.html" class="btn btn-accent">Explore Our Menu</a>
-            <a href="/contact.html#reservation" class="btn btn-outline">Book a Table</a>
+            <a href="${config.social.line}" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Book a Table</a>
           </div>
         </div>
       </section>
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <h2>All You Can Drink</h2>
           <p>${config.promotions.allYouCanDrink.price} THB / ${config.promotions.allYouCanDrink.duration}</p>
           <p style="font-size: 0.9375rem;">${config.promotions.allYouCanDrink.availability}</p>
-          <a href="/contact.html#reservation" class="btn btn-accent" style="margin-top: 1rem;">Reserve Now</a>
+          <a href="${config.social.line}" target="_blank" rel="noopener noreferrer" class="btn btn-accent" style="margin-top: 1rem;">Reserve Now</a>
         </div>
       </section>
 

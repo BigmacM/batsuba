@@ -88,6 +88,7 @@ export const SITE_CONFIG = {
     facebook: "https://www.facebook.com/butsaba.wine.cafe",   // update with exact URL
     instagram: "https://www.instagram.com/butsaba_wine_cafe",
     instagramHandle: "@butsaba_wine_cafe",
+    line: "https://line.me/R/ti/p/@butsaba",   // update with actual LINE ID
     tiktok: "",   // add if available
   },
 

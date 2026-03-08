@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="rating-badge" style="margin-top: var(--space-3);">${ICONS.star} ${loc.googleRating}/5 (${loc.googleReviewCount} reviews)</div>
               <div style="margin-top: var(--space-4); display: flex; gap: 1rem; flex-wrap: wrap;">
                 <a href="${loc.googleMapsUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Get Directions</a>
-                <a href="/contact.html#reservation" class="btn btn-outline" style="color: var(--color-primary); border-color: var(--color-primary);">Reserve a Table</a>
+                <a href="${config.social.line}" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="color: var(--color-primary); border-color: var(--color-primary);">Reserve a Table</a>
               </div>
             </div>
 
@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <h2 style="color: var(--color-primary);">Ready to Dine?</h2>
             <p style="color: var(--color-text-muted); margin: var(--space-2) 0 var(--space-4);">Reserve your table at Tree Town Pattaya</p>
             <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-              <a href="/contact.html#reservation" class="btn btn-primary">Make a Reservation</a>
+              <a href="${config.social.line}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Make a Reservation</a>
               <a href="/menu.html" class="btn btn-outline" style="color: var(--color-primary); border-color: var(--color-primary);">View Our Menu</a>
             </div>
           </div>
