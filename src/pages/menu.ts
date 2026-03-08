@@ -39,16 +39,23 @@ function renderMenuSections(): string {
 
   const renderSection = (cats: typeof MENU_CATEGORIES) => cats.map(cat => {
     const images = categoryImages[cat.id] || [];
-    const photosBtn = images.length > 0 ? `
-      <button class="menu-photos-btn" data-lightbox="${cat.id}" aria-label="View ${cat.label} menu photos">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        ${images.length} photo${images.length > 1 ? 's' : ''}
-      </button>
+    const photoStrip = images.length > 0 ? `
+      <div class="menu-photo-strip" data-category="${cat.id}">
+        ${images.map((file, i) => `
+          <div class="menu-photo-thumb" data-idx="${i}" data-src="/images/menu-pages/${file.replace(/ /g, '%20')}">
+            <img src="/images/menu-pages/${file.replace(/ /g, '%20')}" alt="${cat.label} menu page ${i + 1}" loading="lazy" decoding="async" width="120" height="80">
+          </div>
+        `).join('')}
+      </div>
+      <div class="menu-photo-expand" data-expand="${cat.id}" style="display: none;">
+        <img src="" alt="" class="menu-photo-full" loading="lazy" decoding="async">
+      </div>
     ` : '';
 
     return `
     <div class="menu-section" id="${cat.id}" data-category="${cat.id}">
-      <h2>${cat.label}${photosBtn}</h2>
+      <h2>${cat.label}</h2>
+      ${photoStrip}
       ${cat.note ? `<p class="menu-note">${cat.note}</p>` : ''}
       <div class="menu-grid">
         ${cat.items.map(item => `
@@ -116,20 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
     </main>
     ${renderFooter()}
 
-    <!-- Menu Photo Lightbox (native dialog) -->
-    <dialog class="menu-lightbox-dialog" id="menu-lightbox">
-      <button class="lb-close" id="lb-close" aria-label="Close">&times;</button>
-      <span class="lb-title" id="lb-title"></span>
-      <span class="lb-counter" id="lb-counter"></span>
-      <button class="lb-nav lb-prev" id="lb-prev" aria-label="Previous">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      </button>
-      <img class="lb-img" id="lb-img" src="" alt="">
-      <button class="lb-nav lb-next" id="lb-next" aria-label="Next">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </button>
-    </dialog>
-
     <script type="application/ld+json">${generateMenuSchema()}</script>
     <script type="application/ld+json">${generateRestaurantSchema()}</script>
     <script type="application/ld+json">${generateBreadcrumbSchema([
@@ -143,8 +136,37 @@ document.addEventListener('DOMContentLoaded', () => {
   initAnimations();
   initDragScroll('.category-nav');
   initMenuInteractions();
-  initLightbox();
+  initPhotoStrips();
 });
+
+function initPhotoStrips(): void {
+  document.querySelectorAll<HTMLElement>('.menu-photo-thumb').forEach(thumb => {
+    thumb.addEventListener('click', () => {
+      const catId = thumb.closest('.menu-photo-strip')?.getAttribute('data-category');
+      if (!catId) return;
+      const expandContainer = document.querySelector<HTMLElement>(`.menu-photo-expand[data-expand="${catId}"]`);
+      if (!expandContainer) return;
+      const fullImg = expandContainer.querySelector('img') as HTMLImageElement;
+      const src = thumb.getAttribute('data-src') || '';
+
+      // If already showing this image, collapse
+      if (expandContainer.style.display !== 'none' && fullImg.src.includes(src.replace(/%20/g, ' '))) {
+        expandContainer.style.display = 'none';
+        thumb.classList.remove('active');
+        return;
+      }
+
+      // Deactivate all thumbs in this strip, activate clicked one
+      thumb.closest('.menu-photo-strip')?.querySelectorAll('.menu-photo-thumb').forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+
+      fullImg.src = src;
+      fullImg.alt = thumb.querySelector('img')?.alt || '';
+      expandContainer.style.display = 'block';
+      expandContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+  });
+}
 
 function initMenuInteractions(): void {
   // Category pill click → scroll to section
@@ -182,72 +204,3 @@ function initMenuInteractions(): void {
   sections.forEach(s => observer.observe(s));
 }
 
-function initLightbox(): void {
-  const dialog = document.getElementById('menu-lightbox') as HTMLDialogElement;
-  if (!dialog) return;
-
-  const lbImg = document.getElementById('lb-img') as HTMLImageElement;
-  const lbTitle = document.getElementById('lb-title') as HTMLElement;
-  const lbCounter = document.getElementById('lb-counter') as HTMLElement;
-  const lbClose = document.getElementById('lb-close') as HTMLElement;
-  const lbPrev = document.getElementById('lb-prev') as HTMLElement;
-  const lbNext = document.getElementById('lb-next') as HTMLElement;
-
-  let images: string[] = [];
-  let idx = 0;
-
-  function render() {
-    const file = images[idx];
-    lbImg.src = `/images/menu-pages/${file.replace(/ /g, '%20')}`;
-    lbImg.alt = `${lbTitle.textContent} page ${idx + 1}`;
-    lbCounter.textContent = `${idx + 1} / ${images.length}`;
-    const multi = images.length > 1;
-    lbPrev.style.display = multi ? '' : 'none';
-    lbNext.style.display = multi ? '' : 'none';
-    lbCounter.style.display = multi ? '' : 'none';
-  }
-
-  function open(catId: string) {
-    const imgs = categoryImages[catId];
-    if (!imgs?.length) return;
-    images = imgs;
-    idx = 0;
-    const section = document.getElementById(catId);
-    lbTitle.textContent = section?.querySelector('h2')?.childNodes[0]?.textContent?.trim() || catId;
-    render();
-    dialog.showModal();
-  }
-
-  // Attach click to each photo button
-  document.querySelectorAll<HTMLElement>('.menu-photos-btn[data-lightbox]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      open(btn.getAttribute('data-lightbox') || '');
-    });
-  });
-
-  lbClose.addEventListener('click', () => dialog.close());
-  lbPrev.addEventListener('click', () => { idx = (idx - 1 + images.length) % images.length; render(); });
-  lbNext.addEventListener('click', () => { idx = (idx + 1) % images.length; render(); });
-
-  // Close on backdrop click
-  dialog.addEventListener('click', (e) => {
-    if (e.target === dialog) dialog.close();
-  });
-
-  // Keyboard navigation
-  dialog.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight') { idx = (idx + 1) % images.length; render(); }
-    if (e.key === 'ArrowLeft') { idx = (idx - 1 + images.length) % images.length; render(); }
-  });
-
-  // Swipe support
-  let touchX = 0;
-  dialog.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
-  dialog.addEventListener('touchend', (e) => {
-    const diff = touchX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) {
-      idx = diff > 0 ? (idx + 1) % images.length : (idx - 1 + images.length) % images.length;
-      render();
-    }
-  });
-}
