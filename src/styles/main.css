@@ -1176,34 +1176,63 @@ main {
   gap: 0.75rem;
 }
 
-.menu-photos-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  font-family: var(--font-body);
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  color: var(--color-accent);
-  background: rgba(212, 165, 116, 0.1);
-  border: 1px solid rgba(212, 165, 116, 0.25);
-  border-radius: 2rem;
-  cursor: pointer;
-  transition: all var(--transition);
-  flex-shrink: 0;
+/* Menu Photo Strip — inline thumbnails that expand in place */
+.menu-photo-strip {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding: 0.5rem 0 0.75rem;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
 }
 
-.menu-photos-btn:hover {
-  background: var(--color-accent);
-  color: var(--color-white);
+.menu-photo-thumb {
+  flex-shrink: 0;
+  width: 5rem;
+  height: 3.5rem;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  opacity: 0.7;
+  transition: all var(--transition);
+}
+
+.menu-photo-thumb:hover {
+  opacity: 1;
   border-color: var(--color-accent);
 }
 
-.menu-photos-btn svg {
-  width: 14px;
-  height: 14px;
+.menu-photo-thumb.active {
+  opacity: 1;
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 8px rgba(107, 27, 42, 0.25);
+}
+
+.menu-photo-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.menu-photo-expand {
+  margin: 0.5rem 0 1rem;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  animation: photoExpand 0.3s ease;
+}
+
+.menu-photo-expand img.menu-photo-full {
+  width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  background: var(--color-cream);
+  border-radius: var(--radius-md);
+}
+
+@keyframes photoExpand {
+  from { opacity: 0; max-height: 0; }
+  to { opacity: 1; max-height: 80vh; }
 }
 
 .menu-section .menu-note {
@@ -1211,133 +1240,6 @@ main {
   font-style: italic;
   font-size: 0.875rem;
   margin-bottom: var(--space-4);
-}
-
-/* Menu Lightbox (native <dialog>) */
-.menu-lightbox-dialog:not([open]) {
-  display: none;
-}
-
-.menu-lightbox-dialog[open] {
-  border: none;
-  background: transparent;
-  padding: 0;
-  max-width: 100vw;
-  max-height: 100vh;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-}
-
-.menu-lightbox-dialog::backdrop {
-  background: rgba(0, 0, 0, 0.92);
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
-}
-
-.menu-lightbox-dialog .lb-close {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  width: 2.5rem;
-  height: 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 50%;
-  color: white;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  z-index: 10;
-}
-
-.menu-lightbox-dialog .lb-close:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
-
-.menu-lightbox-dialog .lb-title {
-  position: fixed;
-  top: 1rem;
-  left: 1rem;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.8125rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  z-index: 10;
-}
-
-.menu-lightbox-dialog .lb-counter {
-  position: fixed;
-  bottom: 1.25rem;
-  left: 50%;
-  transform: translateX(-50%);
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  z-index: 10;
-}
-
-.menu-lightbox-dialog .lb-img {
-  max-width: 90vw;
-  max-height: 85vh;
-  object-fit: contain;
-  border-radius: var(--radius-md);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  user-select: none;
-  -webkit-user-drag: none;
-}
-
-.menu-lightbox-dialog .lb-nav {
-  position: fixed;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 3rem;
-  height: 3rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: 50%;
-  color: white;
-  font-size: 1.25rem;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
-  z-index: 10;
-}
-
-.menu-lightbox-dialog .lb-nav:hover {
-  background: rgba(255, 255, 255, 0.25);
-  transform: translateY(-50%) scale(1.1);
-}
-
-.menu-lightbox-dialog .lb-prev { left: 1rem; }
-.menu-lightbox-dialog .lb-next { right: 1rem; }
-
-@media (max-width: 639px) {
-  .menu-lightbox-dialog .lb-img {
-    max-width: 96vw;
-    max-height: 80vh;
-  }
-
-  .menu-lightbox-dialog .lb-nav {
-    width: 2.5rem;
-    height: 2.5rem;
-    font-size: 1rem;
-  }
-
-  .menu-lightbox-dialog .lb-prev { left: 0.5rem; }
-  .menu-lightbox-dialog .lb-next { right: 0.5rem; }
 }
 
 .menu-grid {

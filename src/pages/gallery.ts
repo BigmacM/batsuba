@@ -76,9 +76,9 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
 
           <!-- Instagram CTA -->
-          <div style="text-align: center; margin-top: var(--space-8); padding: var(--space-6) var(--space-4); background: var(--color-cream); border-radius: var(--radius-md);" class="animate-fade-up">
+          <div style="display: flex; flex-direction: column; align-items: center; margin-top: var(--space-8); padding: var(--space-6) var(--space-4); background: var(--color-cream); border-radius: var(--radius-md);" class="animate-fade-up">
             <h3 style="color: var(--color-primary); margin-bottom: var(--space-2); font-size: 1.5rem;">Follow Us on Instagram</h3>
-            <p style="font-size: 1.125rem; color: var(--color-text-muted); margin-bottom: var(--space-4);">See more of our food, wine, and atmosphere</p>
+            <p style="font-size: 1.125rem; color: var(--color-text-muted); margin-bottom: var(--space-4); text-align: center;">See more of our food, wine, and atmosphere</p>
             <a href="${config.social.instagram}" target="_blank" rel="noopener noreferrer" class="btn btn-accent" style="font-size: 1.125rem; padding: 0.875rem 2rem;">${config.social.instagramHandle}</a>
           </div>
         </div>
