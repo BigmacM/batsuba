@@ -95,7 +95,7 @@ export const SITE_CONFIG = {
   // ── TRACKING & ANALYTICS ───────────────────────────────────
   // ⚠️  FILL IN YOUR REAL IDs BEFORE DEPLOYING
   tracking: {
-    googleTagManagerId: "GTM-XXXXXXX",       // e.g. GTM-ABC1234
+    googleTagManagerId: "GTM-NJWTC9PF",
     googleAnalyticsId: "G-XXXXXXXXXX",        // e.g. G-ABC123DEF4
     metaPixelId: "XXXXXXXXXXXXXXXX",           // e.g. 1234567890123456
     googleSiteVerification: "",                // from Google Search Console

@@ -5,14 +5,21 @@ export function initTracking(): void {
 
   // Google Tag Manager
   if (googleTagManagerId && !googleTagManagerId.includes('XXXXXXX')) {
+    // dataLayer init + gtm.start event (matches official GTM snippet)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const w = window as any;
+    w.dataLayer = w.dataLayer || [];
+    w.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+
     const gtmScript = document.createElement('script');
     gtmScript.async = true;
     gtmScript.src = `https://www.googletagmanager.com/gtm.js?id=${googleTagManagerId}`;
-    document.head.appendChild(gtmScript);
-
-    // dataLayer init
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (window as any).dataLayer = (window as any).dataLayer || [];
+    const firstScript = document.getElementsByTagName('script')[0];
+    if (firstScript?.parentNode) {
+      firstScript.parentNode.insertBefore(gtmScript, firstScript);
+    } else {
+      document.head.appendChild(gtmScript);
+    }
 
     // noscript fallback
     const noscript = document.createElement('noscript');
