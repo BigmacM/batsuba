@@ -702,6 +702,10 @@ main {
   color: rgba(255, 255, 255, 0.4);
 }
 
+.footer-credit:hover {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
 .social-links {
   display: flex;
   gap: var(--space-2);
