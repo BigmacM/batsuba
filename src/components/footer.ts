@@ -67,7 +67,7 @@ export function renderFooter(): string {
       <div class="footer-bottom">
         <span>&copy; 2025 ${config.brand.name}. All rights reserved.</span>
         <a href="https://nikamarketing.com/" target="_blank" rel="noopener noreferrer" class="footer-credit" style="display: inline-flex; align-items: center; gap: 0.375rem; color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.75rem; transition: color 0.2s;">
-          <img src="https://nikamarketing.com/images/nika-logo.png" alt="Nika Marketing" width="16" height="16" style="border-radius: 2px;" loading="lazy">
+          <img src="https://nikamarketing.com/images/nika-logo.png" alt="Nika Marketing" width="24" height="24" style="border-radius: 3px;" loading="lazy">
           Built by Nika Marketing
         </a>
       </div>
