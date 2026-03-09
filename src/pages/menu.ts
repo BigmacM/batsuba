@@ -6,6 +6,7 @@ import { generateMenuSchema, generateRestaurantSchema } from '../components/sche
 import { generateBreadcrumbSchema } from '../utils/seo';
 import { initTracking } from '../components/tracking';
 import { initAnimations, initDragScroll } from '../utils/animations';
+import { renderLightbox } from '../utils/lightbox';
 
 const config = SITE_CONFIG;
 
@@ -123,6 +124,8 @@ document.addEventListener('DOMContentLoaded', () => {
     </main>
     ${renderFooter()}
 
+    ${renderLightbox('menu-lightbox')}
+
     <script type="application/ld+json">${generateMenuSchema()}</script>
     <script type="application/ld+json">${generateRestaurantSchema()}</script>
     <script type="application/ld+json">${generateBreadcrumbSchema([
@@ -140,6 +143,65 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initPhotoStrips(): void {
+  const dialog = document.getElementById('menu-lightbox') as HTMLDialogElement;
+  if (!dialog) return;
+
+  const lbImg = dialog.querySelector('.lb-img') as HTMLImageElement;
+  const lbCounter = dialog.querySelector('.lb-counter') as HTMLElement;
+  const lbClose = dialog.querySelector('.lb-close') as HTMLElement;
+  const lbPrev = dialog.querySelector('.lb-prev') as HTMLElement;
+  const lbNext = dialog.querySelector('.lb-next') as HTMLElement;
+
+  let currentSrcs: string[] = [];
+  let currentAlts: string[] = [];
+  let idx = 0;
+
+  function render() {
+    lbImg.src = currentSrcs[idx];
+    lbImg.alt = currentAlts[idx];
+    lbCounter.textContent = `${idx + 1} / ${currentSrcs.length}`;
+    const multi = currentSrcs.length > 1;
+    lbPrev.style.display = multi ? '' : 'none';
+    lbNext.style.display = multi ? '' : 'none';
+    lbCounter.style.display = multi ? '' : 'none';
+  }
+
+  function openLightbox(catId: string, startIdx: number) {
+    const strip = document.querySelector<HTMLElement>(`.menu-photo-strip[data-category="${catId}"]`);
+    if (!strip) return;
+    const thumbs = strip.querySelectorAll<HTMLElement>('.menu-photo-thumb');
+    currentSrcs = [];
+    currentAlts = [];
+    thumbs.forEach(t => {
+      currentSrcs.push(t.getAttribute('data-src') || '');
+      currentAlts.push(t.querySelector('img')?.alt || '');
+    });
+    if (!currentSrcs.length) return;
+    idx = startIdx;
+    render();
+    dialog.showModal();
+  }
+
+  function next() { idx = (idx + 1) % currentSrcs.length; render(); }
+  function prev() { idx = (idx - 1 + currentSrcs.length) % currentSrcs.length; render(); }
+
+  lbClose.addEventListener('click', () => dialog.close());
+  lbPrev.addEventListener('click', (e) => { e.stopPropagation(); prev(); });
+  lbNext.addEventListener('click', (e) => { e.stopPropagation(); next(); });
+  dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
+  dialog.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') next();
+    if (e.key === 'ArrowLeft') prev();
+  });
+
+  let touchX = 0;
+  dialog.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+  dialog.addEventListener('touchend', (e) => {
+    const diff = touchX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) { if (diff > 0) next(); else prev(); }
+  });
+
+  // Thumbnail click: expand inline + open lightbox on double-tap, or open lightbox directly
   document.querySelectorAll<HTMLElement>('.menu-photo-thumb').forEach(thumb => {
     thumb.addEventListener('click', () => {
       const catId = thumb.closest('.menu-photo-strip')?.getAttribute('data-category');
@@ -148,23 +210,35 @@ function initPhotoStrips(): void {
       if (!expandContainer) return;
       const fullImg = expandContainer.querySelector('img') as HTMLImageElement;
       const src = thumb.getAttribute('data-src') || '';
+      const thumbIdx = parseInt(thumb.getAttribute('data-idx') || '0', 10);
 
-      // If already showing this image, collapse
-      if (expandContainer.style.display !== 'none' && fullImg.src.includes(src.replace(/%20/g, ' '))) {
-        expandContainer.style.display = 'none';
-        thumb.classList.remove('active');
-        return;
-      }
-
-      // Deactivate all thumbs in this strip, activate clicked one
+      // Deactivate all thumbs, activate this one
       thumb.closest('.menu-photo-strip')?.querySelectorAll('.menu-photo-thumb').forEach(t => t.classList.remove('active'));
       thumb.classList.add('active');
 
       fullImg.src = src;
       fullImg.alt = thumb.querySelector('img')?.alt || '';
       expandContainer.style.display = 'block';
-      expandContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      // Open lightbox
+      openLightbox(catId, thumbIdx);
     });
+  });
+
+  // Expanded image click also opens lightbox
+  document.querySelectorAll<HTMLElement>('.menu-photo-expand').forEach(container => {
+    const fullImg = container.querySelector('img');
+    if (fullImg) {
+      fullImg.style.cursor = 'pointer';
+      fullImg.addEventListener('click', () => {
+        const catId = container.getAttribute('data-expand') || '';
+        const strip = document.querySelector<HTMLElement>(`.menu-photo-strip[data-category="${catId}"]`);
+        if (!strip) return;
+        const activeThumb = strip.querySelector('.menu-photo-thumb.active');
+        const thumbIdx = activeThumb ? parseInt(activeThumb.getAttribute('data-idx') || '0', 10) : 0;
+        openLightbox(catId, thumbIdx);
+      });
+    }
   });
 }
 
