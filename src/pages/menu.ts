@@ -9,53 +9,14 @@ import { initAnimations, initDragScroll } from '../utils/animations';
 
 const config = SITE_CONFIG;
 
-// Map category IDs to their menu page image filenames in /images/menu-pages/
-const categoryImages: Record<string, string[]> = {
-  'quick-dishes':       ['Quick Dishes (1).png', 'Quick Dishes (2).png'],
-  'salads':             ['Salad (1).png', 'Salad (2).png'],
-  'snacks-appetizers':  ['Snack (1).png', 'Snack (2).png'],
-  'soups':              ['Soup.png'],
-  'pasta':              ['Pasta (1).png', 'Pasta (2).png', 'Pasta (3).png', 'Pasta (4).png'],
-  'main-courses':       ['Secondo Piatto (1).png', 'Secondo Piatto (2).png', 'Secondo Piatto (3).png'],
-  'pizza':              ['Pizza (1).png', 'Pizza (2).png'],
-  'steak-meat':         ['Steak and Meat Dish (1).png', 'Steak and Meat Dish (2).png'],
-  'seafood':            ['Seafood (1).png', 'Seafood (2).png', 'Seafood (3).png'],
-  'specials':           ['Recommended (1).png', 'Recommended (2).png'],
-  'thai-soups':         ['Thai Soup (1).png', 'Thai Soup (2).png'],
-  'thai-dishes':        ['Thai Food  (1).png', 'Thai Food  (2).png'],
-  'somtam':             ['Thai Food  (3).png'],
-  'yam':                ['Thai Food  (4).png'],
-  'fried-vegetable':    ['Thai Food  (5).png'],
-  'stir-fried':         ['Thai Food  (6).png'],
-  'beef-pork-salads':   ['Thai Food  (7).png'],
-  'pork-dishes':        ['Thai Food  (8).png'],
-  'basil-dishes':       ['Thai Food  (9).png'],
-  'fried-rice':         ['Thai Food  (10).png'],
-};
-
 function renderMenuSections(): string {
   const italianIds = ['quick-dishes', 'salads', 'snacks-appetizers', 'japanese', 'soups', 'pasta', 'main-courses', 'pizza', 'steak-meat', 'seafood', 'specials'];
   const thaiIds = ['thai-soups', 'thai-dishes', 'somtam', 'yam', 'fried-vegetable', 'stir-fried', 'beef-pork-salads', 'pork-dishes', 'basil-dishes', 'fried-rice', 'beverages-extras'];
 
   const renderSection = (cats: typeof MENU_CATEGORIES) => cats.map(cat => {
-    const images = categoryImages[cat.id] || [];
-    const photoStrip = images.length > 0 ? `
-      <div class="menu-photo-strip" data-category="${cat.id}">
-        ${images.map((file, i) => `
-          <div class="menu-photo-thumb" data-idx="${i}" data-src="/images/menu-pages/${file.replace(/ /g, '%20')}">
-            <img src="/images/menu-pages/${file.replace(/ /g, '%20')}" alt="${cat.label} menu page ${i + 1}" loading="lazy" decoding="async" width="120" height="80">
-          </div>
-        `).join('')}
-      </div>
-      <div class="menu-photo-expand" data-expand="${cat.id}" style="display: none;">
-        <img src="" alt="" class="menu-photo-full" loading="lazy" decoding="async">
-      </div>
-    ` : '';
-
     return `
     <div class="menu-section" id="${cat.id}" data-category="${cat.id}">
       <h2>${cat.label}</h2>
-      ${photoStrip}
       ${cat.note ? `<p class="menu-note">${cat.note}</p>` : ''}
       <div class="menu-grid">
         ${cat.items.map(item => `
@@ -136,135 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAnimations();
   initDragScroll('.category-nav');
   initMenuInteractions();
-  initPhotoStrips();
 });
-
-function initPhotoStrips(): void {
-  // ── Build lightbox DOM element from scratch, append to body ──
-  const dialog = document.createElement('dialog');
-  dialog.id = 'menu-photo-viewer';
-  dialog.className = 'photo-lightbox';
-  document.body.appendChild(dialog);
-
-  const closeBtn = document.createElement('button');
-  closeBtn.className = 'lb-close';
-  closeBtn.setAttribute('aria-label', 'Close');
-  closeBtn.innerHTML = '&times;';
-  dialog.appendChild(closeBtn);
-
-  const counter = document.createElement('span');
-  counter.className = 'lb-counter';
-  dialog.appendChild(counter);
-
-  const prevBtn = document.createElement('button');
-  prevBtn.className = 'lb-nav lb-prev';
-  prevBtn.setAttribute('aria-label', 'Previous');
-  prevBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>';
-  dialog.appendChild(prevBtn);
-
-  const img = document.createElement('img');
-  img.className = 'lb-img';
-  dialog.appendChild(img);
-
-  const nextBtn = document.createElement('button');
-  nextBtn.className = 'lb-nav lb-next';
-  nextBtn.setAttribute('aria-label', 'Next');
-  nextBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
-  dialog.appendChild(nextBtn);
-
-  // ── Lightbox state & logic ──
-  let srcs: string[] = [];
-  let alts: string[] = [];
-  let idx = 0;
-
-  function render() {
-    img.src = srcs[idx];
-    img.alt = alts[idx];
-    counter.textContent = `${idx + 1} / ${srcs.length}`;
-    const multi = srcs.length > 1;
-    prevBtn.style.display = multi ? '' : 'none';
-    nextBtn.style.display = multi ? '' : 'none';
-    counter.style.display = multi ? '' : 'none';
-  }
-
-  function show(catId: string, startIdx: number) {
-    const strip = document.querySelector<HTMLElement>(`.menu-photo-strip[data-category="${catId}"]`);
-    if (!strip) return;
-    srcs = [];
-    alts = [];
-    strip.querySelectorAll<HTMLElement>('.menu-photo-thumb').forEach(t => {
-      srcs.push(t.getAttribute('data-src') || '');
-      alts.push(t.querySelector('img')?.alt || '');
-    });
-    if (!srcs.length) return;
-    idx = startIdx;
-    render();
-    dialog.showModal();
-  }
-
-  function next() { idx = (idx + 1) % srcs.length; render(); }
-  function prev() { idx = (idx - 1 + srcs.length) % srcs.length; render(); }
-
-  // ── Event listeners on lightbox ──
-  closeBtn.addEventListener('click', () => dialog.close());
-  prevBtn.addEventListener('click', (e) => { e.stopPropagation(); prev(); });
-  nextBtn.addEventListener('click', (e) => { e.stopPropagation(); next(); });
-  dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
-  dialog.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight') next();
-    else if (e.key === 'ArrowLeft') prev();
-    else if (e.key === 'Escape') dialog.close();
-  });
-
-  let touchX = 0;
-  dialog.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
-  dialog.addEventListener('touchend', (e) => {
-    const diff = touchX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) { if (diff > 0) next(); else prev(); }
-  });
-
-  // ── Wire up thumbnail clicks ──
-  document.querySelectorAll<HTMLElement>('.menu-photo-thumb').forEach(thumb => {
-    thumb.style.cursor = 'pointer';
-    thumb.addEventListener('click', () => {
-      const catId = thumb.closest('.menu-photo-strip')?.getAttribute('data-category');
-      if (!catId) return;
-      const thumbIdx = parseInt(thumb.getAttribute('data-idx') || '0', 10);
-
-      // Highlight active thumb
-      thumb.closest('.menu-photo-strip')?.querySelectorAll('.menu-photo-thumb').forEach(t => t.classList.remove('active'));
-      thumb.classList.add('active');
-
-      // Show inline expand too
-      const expandContainer = document.querySelector<HTMLElement>(`.menu-photo-expand[data-expand="${catId}"]`);
-      if (expandContainer) {
-        const fullImg = expandContainer.querySelector('img') as HTMLImageElement;
-        fullImg.src = thumb.getAttribute('data-src') || '';
-        fullImg.alt = thumb.querySelector('img')?.alt || '';
-        expandContainer.style.display = 'block';
-      }
-
-      // Open lightbox
-      show(catId, thumbIdx);
-    });
-  });
-
-  // Expanded image click also opens lightbox
-  document.querySelectorAll<HTMLElement>('.menu-photo-expand').forEach(container => {
-    const fullImg = container.querySelector('img');
-    if (fullImg) {
-      fullImg.style.cursor = 'pointer';
-      fullImg.addEventListener('click', () => {
-        const catId = container.getAttribute('data-expand') || '';
-        const strip = document.querySelector<HTMLElement>(`.menu-photo-strip[data-category="${catId}"]`);
-        if (!strip) return;
-        const activeThumb = strip.querySelector('.menu-photo-thumb.active');
-        const thumbIdx = activeThumb ? parseInt(activeThumb.getAttribute('data-idx') || '0', 10) : 0;
-        show(catId, thumbIdx);
-      });
-    }
-  });
-}
 
 function initMenuInteractions(): void {
   // Category pill click → scroll to section
