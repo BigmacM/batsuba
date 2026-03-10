@@ -136,9 +136,9 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="section-divider"></div>
             <p>Click any page to view in full detail</p>
           </div>
-          <div class="menu-book-grid animate-fade-up">
+          <div class="menu-book-grid">
             ${menuBookPages.map((file, i) => `
-              <div class="menu-book-thumb" data-idx="${i}" data-src="/images/menu-pages/${file.replace(/ /g, '%20')}">
+              <div class="menu-book-thumb" data-idx="${i}" data-src="/images/menu-pages/${file.replace(/ /g, '%20')}" style="cursor:pointer;">
                 <img src="/images/menu-pages/${file.replace(/ /g, '%20')}" alt="Menu page ${i + 1}" loading="lazy" decoding="async" width="200" height="280">
               </div>
             `).join('')}
@@ -165,29 +165,35 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initMenuBook(): void {
-  // Build lightbox for menu book — appended directly to document.body
+  // Build overlay entirely with inline styles — zero CSS dependency
   const overlay = document.createElement('div');
-  overlay.id = 'menu-book-overlay';
-  overlay.className = 'menu-book-overlay';
-  overlay.innerHTML = `
-    <button class="mb-close" aria-label="Close">&times;</button>
-    <span class="mb-counter"></span>
-    <button class="mb-nav mb-prev" aria-label="Previous">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-    </button>
-    <img class="mb-img" src="" alt="">
-    <button class="mb-nav mb-next" aria-label="Next">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-    </button>
-  `;
+  overlay.style.cssText = 'display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.92);align-items:center;justify-content:center;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);';
   document.body.appendChild(overlay);
 
-  const mbImg = overlay.querySelector('.mb-img') as HTMLImageElement;
-  const mbCounter = overlay.querySelector('.mb-counter') as HTMLElement;
-  const mbClose = overlay.querySelector('.mb-close') as HTMLElement;
-  const mbPrev = overlay.querySelector('.mb-prev') as HTMLElement;
-  const mbNext = overlay.querySelector('.mb-next') as HTMLElement;
+  const closeBtn = document.createElement('button');
+  closeBtn.innerHTML = '&times;';
+  closeBtn.style.cssText = 'position:fixed;top:1rem;right:1rem;width:2.75rem;height:2.75rem;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.15);border:none;border-radius:50%;color:#fff;font-size:1.75rem;cursor:pointer;z-index:10;';
+  overlay.appendChild(closeBtn);
 
+  const counter = document.createElement('span');
+  counter.style.cssText = 'position:fixed;bottom:1.25rem;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.6);font-size:0.8rem;font-weight:700;letter-spacing:0.1em;z-index:10;';
+  overlay.appendChild(counter);
+
+  const prevBtn = document.createElement('button');
+  prevBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>';
+  prevBtn.style.cssText = 'position:fixed;top:50%;left:1rem;transform:translateY(-50%);width:3rem;height:3rem;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.15);border:none;border-radius:50%;color:#fff;cursor:pointer;z-index:10;';
+  overlay.appendChild(prevBtn);
+
+  const img = document.createElement('img');
+  img.style.cssText = 'max-width:90vw;max-height:85vh;object-fit:contain;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,0.5);user-select:none;';
+  overlay.appendChild(img);
+
+  const nextBtn = document.createElement('button');
+  nextBtn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>';
+  nextBtn.style.cssText = 'position:fixed;top:50%;right:1rem;transform:translateY(-50%);width:3rem;height:3rem;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.15);border:none;border-radius:50%;color:#fff;cursor:pointer;z-index:10;';
+  overlay.appendChild(nextBtn);
+
+  // Collect all thumbnail sources
   const srcs: string[] = [];
   const thumbs = document.querySelectorAll<HTMLElement>('.menu-book-thumb');
   thumbs.forEach(t => srcs.push(t.getAttribute('data-src') || ''));
@@ -196,21 +202,21 @@ function initMenuBook(): void {
   let isOpen = false;
 
   function render() {
-    mbImg.src = srcs[idx];
-    mbImg.alt = `Menu page ${idx + 1}`;
-    mbCounter.textContent = `${idx + 1} / ${srcs.length}`;
+    img.src = srcs[idx];
+    img.alt = `Menu page ${idx + 1}`;
+    counter.textContent = `${idx + 1} / ${srcs.length}`;
   }
 
   function open(startIdx: number) {
     idx = startIdx;
     render();
-    overlay.classList.add('open');
+    overlay.style.display = 'flex';
     document.body.style.overflow = 'hidden';
     isOpen = true;
   }
 
   function close() {
-    overlay.classList.remove('open');
+    overlay.style.display = 'none';
     document.body.style.overflow = '';
     isOpen = false;
   }
@@ -218,15 +224,14 @@ function initMenuBook(): void {
   function next() { idx = (idx + 1) % srcs.length; render(); }
   function prev() { idx = (idx - 1 + srcs.length) % srcs.length; render(); }
 
-  // Thumbnail clicks
+  // Wire up thumbnail clicks
   thumbs.forEach((thumb, i) => {
-    thumb.addEventListener('click', () => open(i));
+    thumb.addEventListener('click', () => { open(i); });
   });
 
-  // Overlay events
-  mbClose.addEventListener('click', close);
-  mbPrev.addEventListener('click', (e) => { e.stopPropagation(); prev(); });
-  mbNext.addEventListener('click', (e) => { e.stopPropagation(); next(); });
+  closeBtn.addEventListener('click', close);
+  prevBtn.addEventListener('click', (e) => { e.stopPropagation(); prev(); });
+  nextBtn.addEventListener('click', (e) => { e.stopPropagation(); next(); });
   overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
 
   document.addEventListener('keydown', (e) => {
