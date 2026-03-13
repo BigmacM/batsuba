@@ -6,6 +6,7 @@ import { generateMenuSchema, generateRestaurantSchema } from '../components/sche
 import { generateBreadcrumbSchema } from '../utils/seo';
 import { initTracking } from '../components/tracking';
 import { initAnimations, initDragScroll } from '../utils/animations';
+import { openLightbox } from '../utils/lightbox';
 
 const config = SITE_CONFIG;
 
@@ -146,80 +147,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initMenuInteractions();
 
   // ── Menu Book Lightbox ──
-  // Everything self-contained in one click handler. No external CSS.
-  // No thumbnails. No DOM queries. Just a button that opens a viewer.
   const openBtn = document.getElementById('open-menu-book');
   if (openBtn) {
-    openBtn.addEventListener('click', function handleOpenMenuBook() {
-      let idx = 0;
-
-      // Create overlay
-      const ov = document.createElement('div');
-      ov.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:99999;background:rgba(0,0,0,0.95);display:flex;align-items:center;justify-content:center;';
-      document.body.appendChild(ov);
-      document.body.style.overflow = 'hidden';
-
-      // Image
-      const pic = document.createElement('img');
-      pic.style.cssText = 'max-width:90vw;max-height:85vh;object-fit:contain;border-radius:8px;';
-      pic.src = menuBookSrcs[idx];
-      ov.appendChild(pic);
-
-      // Counter
-      const ctr = document.createElement('div');
-      ctr.style.cssText = 'position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.6);font-size:0.85rem;font-weight:700;';
-      ov.appendChild(ctr);
-
-      // Close button
-      const x = document.createElement('button');
-      x.textContent = '✕';
-      x.style.cssText = 'position:absolute;top:1rem;right:1rem;width:3rem;height:3rem;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.15);border:none;border-radius:50%;color:#fff;font-size:1.5rem;cursor:pointer;';
-      ov.appendChild(x);
-
-      // Prev button
-      const pv = document.createElement('button');
-      pv.innerHTML = '‹';
-      pv.style.cssText = 'position:absolute;top:50%;left:1rem;transform:translateY(-50%);width:3rem;height:3rem;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.15);border:none;border-radius:50%;color:#fff;font-size:2rem;cursor:pointer;';
-      ov.appendChild(pv);
-
-      // Next button
-      const nx = document.createElement('button');
-      nx.innerHTML = '›';
-      nx.style.cssText = 'position:absolute;top:50%;right:1rem;transform:translateY(-50%);width:3rem;height:3rem;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.15);border:none;border-radius:50%;color:#fff;font-size:2rem;cursor:pointer;';
-      ov.appendChild(nx);
-
-      function update() {
-        pic.src = menuBookSrcs[idx];
-        ctr.textContent = (idx + 1) + ' / ' + menuBookSrcs.length;
-      }
-      update();
-
-      function destroy() {
-        document.body.removeChild(ov);
-        document.body.style.overflow = '';
-        document.removeEventListener('keydown', onKey);
-      }
-
-      x.onclick = destroy;
-      pv.onclick = function(e) { e.stopPropagation(); idx = (idx - 1 + menuBookSrcs.length) % menuBookSrcs.length; update(); };
-      nx.onclick = function(e) { e.stopPropagation(); idx = (idx + 1) % menuBookSrcs.length; update(); };
-      ov.onclick = function(e) { if (e.target === ov) destroy(); };
-
-      function onKey(e: KeyboardEvent) {
-        if (e.key === 'Escape') destroy();
-        if (e.key === 'ArrowRight') { idx = (idx + 1) % menuBookSrcs.length; update(); }
-        if (e.key === 'ArrowLeft') { idx = (idx - 1 + menuBookSrcs.length) % menuBookSrcs.length; update(); }
-      }
-      document.addEventListener('keydown', onKey);
-
-      // Swipe
-      let tx = 0;
-      ov.ontouchstart = function(e) { tx = e.touches[0].clientX; };
-      ov.ontouchend = function(e) {
-        const d = tx - e.changedTouches[0].clientX;
-        if (Math.abs(d) > 50) { idx = d > 0 ? (idx + 1) % menuBookSrcs.length : (idx - 1 + menuBookSrcs.length) % menuBookSrcs.length; update(); }
-      };
-    });
+    openBtn.addEventListener('click', () => openLightbox(menuBookSrcs, 0));
   }
 });
 

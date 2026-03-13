@@ -1,110 +1,133 @@
 /**
- * Shared photo lightbox using native <dialog>.
- * Works on gallery pages and location pages.
+ * Universal lightbox — fully self-contained, no <dialog>, no external CSS.
+ * Creates/destroys a fixed overlay on the fly using inline styles only.
  */
 
-/** Render the lightbox dialog HTML (include in innerHTML) */
-export function renderLightbox(id = 'photo-lightbox'): string {
-  return `
-    <dialog class="photo-lightbox" id="${id}">
-      <button class="lb-close" aria-label="Close">&times;</button>
-      <span class="lb-counter"></span>
-      <button class="lb-nav lb-prev" aria-label="Previous">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-      </button>
-      <img class="lb-img" src="" alt="">
-      <button class="lb-nav lb-next" aria-label="Next">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </button>
-    </dialog>
-  `;
+/**
+ * Open a lightbox viewer for an array of image URLs.
+ * @param srcs  Array of image URLs to display
+ * @param startIdx  Index to start at (default 0)
+ */
+export function openLightbox(srcs: string[], startIdx = 0): void {
+  if (!srcs.length) return;
+  let idx = startIdx;
+
+  // -- Overlay --
+  const ov = document.createElement('div');
+  ov.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;z-index:99999;background:rgba(0,0,0,0.95);display:flex;align-items:center;justify-content:center;';
+  document.body.appendChild(ov);
+  document.body.style.overflow = 'hidden';
+
+  // -- Image --
+  const pic = document.createElement('img');
+  pic.style.cssText = 'max-width:90vw;max-height:85vh;object-fit:contain;border-radius:8px;user-select:none;';
+  pic.draggable = false;
+  ov.appendChild(pic);
+
+  // -- Counter --
+  const ctr = document.createElement('div');
+  ctr.style.cssText = 'position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.6);font-size:0.85rem;font-weight:700;pointer-events:none;';
+  ov.appendChild(ctr);
+
+  // -- Close button --
+  const xBtn = document.createElement('button');
+  xBtn.textContent = '\u2715';
+  xBtn.style.cssText = 'position:absolute;top:1rem;right:1rem;width:3rem;height:3rem;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.15);border:none;border-radius:50%;color:#fff;font-size:1.5rem;cursor:pointer;z-index:1;';
+  ov.appendChild(xBtn);
+
+  const showNav = srcs.length > 1;
+
+  // -- Prev button --
+  const pvBtn = document.createElement('button');
+  pvBtn.innerHTML = '&#8249;';
+  pvBtn.style.cssText = 'position:absolute;top:50%;left:1rem;transform:translateY(-50%);width:3rem;height:3rem;display:' + (showNav ? 'flex' : 'none') + ';align-items:center;justify-content:center;background:rgba(255,255,255,0.15);border:none;border-radius:50%;color:#fff;font-size:2rem;cursor:pointer;z-index:1;';
+  ov.appendChild(pvBtn);
+
+  // -- Next button --
+  const nxBtn = document.createElement('button');
+  nxBtn.innerHTML = '&#8250;';
+  nxBtn.style.cssText = 'position:absolute;top:50%;right:1rem;transform:translateY(-50%);width:3rem;height:3rem;display:' + (showNav ? 'flex' : 'none') + ';align-items:center;justify-content:center;background:rgba(255,255,255,0.15);border:none;border-radius:50%;color:#fff;font-size:2rem;cursor:pointer;z-index:1;';
+  ov.appendChild(nxBtn);
+
+  function update(): void {
+    pic.src = srcs[idx];
+    ctr.textContent = srcs.length > 1 ? (idx + 1) + ' / ' + srcs.length : '';
+  }
+  update();
+
+  function destroy(): void {
+    ov.remove();
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', onKey);
+  }
+
+  function go(dir: number): void {
+    idx = (idx + dir + srcs.length) % srcs.length;
+    update();
+  }
+
+  xBtn.onclick = destroy;
+  pvBtn.onclick = (e) => { e.stopPropagation(); go(-1); };
+  nxBtn.onclick = (e) => { e.stopPropagation(); go(1); };
+  ov.onclick = (e) => { if (e.target === ov) destroy(); };
+
+  function onKey(e: KeyboardEvent): void {
+    if (e.key === 'Escape') destroy();
+    if (e.key === 'ArrowRight') go(1);
+    if (e.key === 'ArrowLeft') go(-1);
+  }
+  document.addEventListener('keydown', onKey);
+
+  // Swipe support
+  let touchX = 0;
+  ov.ontouchstart = (e) => { touchX = e.touches[0].clientX; };
+  ov.ontouchend = (e) => {
+    const diff = touchX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) go(diff > 0 ? 1 : -1);
+  };
 }
 
-/** Initialize lightbox on gallery items that contain <img> elements */
-export function initLightbox(id = 'photo-lightbox', itemSelector = '.gallery-item'): void {
-  const dialog = document.getElementById(id) as HTMLDialogElement;
-  if (!dialog) return;
+/**
+ * Attach lightbox behavior to a grid of clickable gallery items.
+ * Collects the actual displayed image src from each item at click time.
+ * @param containerSelector  CSS selector for the grid container
+ * @param itemSelector       CSS selector for each clickable item within the container
+ */
+export function initGalleryLightbox(containerSelector: string, itemSelector = '.gallery-item'): void {
+  const container = document.querySelector(containerSelector);
+  if (!container) return;
 
-  const lbImg = dialog.querySelector('.lb-img') as HTMLImageElement;
-  const lbCounter = dialog.querySelector('.lb-counter') as HTMLElement;
-  const lbClose = dialog.querySelector('.lb-close') as HTMLElement;
-  const lbPrev = dialog.querySelector('.lb-prev') as HTMLElement;
-  const lbNext = dialog.querySelector('.lb-next') as HTMLElement;
+  container.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const item = target.closest(itemSelector) as HTMLElement | null;
+    if (!item) return;
 
-  let srcs: string[] = [];
-  let alts: string[] = [];
-  let idx = 0;
+    // Collect all visible items and their displayed image srcs at click time
+    const allItems = Array.from(container.querySelectorAll<HTMLElement>(itemSelector));
+    const visibleItems: HTMLElement[] = [];
+    const srcs: string[] = [];
 
-  function collectImages(): void {
-    srcs = [];
-    alts = [];
-    document.querySelectorAll<HTMLElement>(itemSelector).forEach(item => {
-      if (item.style.display === 'none' || item.offsetParent === null) return;
-      const img = item.querySelector('img') as HTMLImageElement | null;
-      if (img) {
-        // Use the original src attribute to avoid browser URL resolution mismatches
-        const src = img.getAttribute('src') || img.currentSrc || img.src;
+    for (const el of allItems) {
+      if (el.offsetParent === null && getComputedStyle(el).display === 'none') continue;
+      const img = el.querySelector('img') as HTMLImageElement | null;
+      if (!img) continue;
+      // Use currentSrc — this is what the browser is actually displaying
+      // (handles <picture> + <source> elements correctly)
+      const src = img.currentSrc || img.src;
+      if (src) {
+        visibleItems.push(el);
         srcs.push(src);
-        alts.push(img.alt || '');
       }
-    });
-  }
-
-  function render(): void {
-    lbImg.src = srcs[idx];
-    lbImg.alt = alts[idx];
-    lbCounter.textContent = `${idx + 1} / ${srcs.length}`;
-    const multi = srcs.length > 1;
-    lbPrev.style.display = multi ? '' : 'none';
-    lbNext.style.display = multi ? '' : 'none';
-    lbCounter.style.display = multi ? '' : 'none';
-  }
-
-  function open(startIdx: number): void {
-    collectImages();
-    if (!srcs.length) return;
-    idx = startIdx;
-    render();
-    dialog.showModal();
-  }
-
-  function next(): void { idx = (idx + 1) % srcs.length; render(); }
-  function prev(): void { idx = (idx - 1 + srcs.length) % srcs.length; render(); }
-
-  // Attach click to each gallery item using DOM index
-  const items = document.querySelectorAll<HTMLElement>(itemSelector);
-  items.forEach((item, i) => {
-    item.style.cursor = 'pointer';
-    item.setAttribute('data-lb-index', String(i));
-    item.addEventListener('click', () => {
-      collectImages();
-      // Find the position of this item among visible items
-      const visibleItems = Array.from(document.querySelectorAll<HTMLElement>(itemSelector))
-        .filter(el => el.style.display !== 'none' && el.offsetParent !== null);
-      const clickedIdx = visibleItems.indexOf(item);
-      open(clickedIdx >= 0 ? clickedIdx : 0);
-    });
-  });
-
-  lbClose.addEventListener('click', () => dialog.close());
-  lbPrev.addEventListener('click', (e) => { e.stopPropagation(); prev(); });
-  lbNext.addEventListener('click', (e) => { e.stopPropagation(); next(); });
-
-  dialog.addEventListener('click', (e) => {
-    if (e.target === dialog) dialog.close();
-  });
-
-  dialog.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight') next();
-    if (e.key === 'ArrowLeft') prev();
-  });
-
-  let touchX = 0;
-  dialog.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
-  dialog.addEventListener('touchend', (e) => {
-    const diff = touchX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) next(); else prev();
     }
+
+    const clickedIdx = visibleItems.indexOf(item);
+    if (clickedIdx >= 0 && srcs.length > 0) {
+      openLightbox(srcs, clickedIdx);
+    }
+  });
+
+  // Set cursor on items
+  container.querySelectorAll<HTMLElement>(itemSelector).forEach(el => {
+    el.style.cursor = 'pointer';
   });
 }
