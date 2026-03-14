@@ -64,10 +64,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 Our original location at Tree Town Pattaya is where the BUTSABA story began. Nestled in the vibrant Tree Town complex, this location offers an intimate dining experience with our full menu of Italian, Thai, and Japanese fusion cuisine paired with an extensive wine collection of over 200 labels.
               </p>
               <p style="line-height: 1.8; color: var(--color-text-muted); margin-top: var(--space-2);">
-                The warm, sophisticated ambiance makes it perfect for romantic dinners, business meetings, or celebrations with friends. Enjoy our signature All You Can Drink package at ${config.promotions.allYouCanDrink.price} THB for ${config.promotions.allYouCanDrink.duration}.
+                The warm, sophisticated ambiance makes it perfect for romantic dinners, business meetings, or celebrations with friends.
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      <!-- All You Can Drink Promo -->
+      <section class="cta-banner" aria-label="All You Can Drink Promotion">
+        <div class="container animate-fade-up" style="text-align:center;">
+          <h2 style="font-size:1.5rem;margin-bottom:0.75rem;">🔥 2-Hour All-You-Can-Drink</h2>
+          <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem;">
+            <span style="background:rgba(255,255,255,0.15);padding:0.4rem 1rem;border-radius:2rem;font-size:0.875rem;font-weight:600;">🍺 Every Sunday: 199 THB</span>
+            <span style="background:rgba(255,255,255,0.15);padding:0.4rem 1rem;border-radius:2rem;font-size:0.875rem;font-weight:600;">✨ Other days: 399 THB</span>
+            <span style="background:rgba(255,255,255,0.15);padding:0.4rem 1rem;border-radius:2rem;font-size:0.875rem;font-weight:600;">🍷 +200 THB for wine</span>
+          </div>
+          <p style="font-size:0.8rem;opacity:0.7;margin-bottom:1rem;">Beer, Whiskey, Shochu included · Add house wine for +200 THB</p>
+          <a href="${config.social.line}" target="_blank" rel="noopener noreferrer" class="btn btn-accent">Reserve Now</a>
         </div>
       </section>
 

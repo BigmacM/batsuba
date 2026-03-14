@@ -96,11 +96,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
       <!-- All You Can Drink Banner -->
       <section class="cta-banner" aria-label="All You Can Drink Promotion">
-        <div class="container animate-fade-up">
-          <h2>All You Can Drink</h2>
-          <p>${config.promotions.allYouCanDrink.price} THB / ${config.promotions.allYouCanDrink.duration}</p>
-          <p style="font-size: 0.9375rem;">${config.promotions.allYouCanDrink.availability}</p>
-          <a href="${config.social.line}" target="_blank" rel="noopener noreferrer" class="btn btn-accent" style="margin-top: 1rem;">Reserve Now</a>
+        <div class="container animate-fade-up" style="text-align:center;">
+          <h2 style="font-size:1.5rem;margin-bottom:0.75rem;">🔥 2-Hour All-You-Can-Drink</h2>
+          <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem;">
+            <span style="background:rgba(255,255,255,0.15);padding:0.4rem 1rem;border-radius:2rem;font-size:0.875rem;font-weight:600;">🍺 Sun: 199 THB</span>
+            <span style="background:rgba(255,255,255,0.15);padding:0.4rem 1rem;border-radius:2rem;font-size:0.875rem;font-weight:600;">✨ Other days: 399 THB</span>
+            <span style="background:rgba(255,255,255,0.15);padding:0.4rem 1rem;border-radius:2rem;font-size:0.875rem;font-weight:600;">🍷 +200 THB for wine</span>
+          </div>
+          <p style="font-size:0.8rem;opacity:0.7;margin-bottom:0.75rem;">Beer, Whiskey, Shochu included · Add house wine for +200 THB</p>
+          <div style="display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;font-size:0.8rem;opacity:0.8;margin-bottom:1rem;">
+            <span>📍 Branch 1 (Tree Town) — 🗓 Every Sunday</span>
+            <span>📍 Branch 2 (Aya Hotel) — 🗓 Every Wednesday</span>
+          </div>
+          <a href="${config.social.line}" target="_blank" rel="noopener noreferrer" class="btn btn-accent">Reserve Now</a>
         </div>
       </section>
 

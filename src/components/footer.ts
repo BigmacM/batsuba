@@ -13,7 +13,7 @@ export function renderFooter(): string {
       ${ICONS.home}
       <span>Home</span>
     </a>
-    <a href="/menu.html" class="mobile-nav-item">
+    <a href="/images/menu-pages/menu%20butsaba.pdf" target="_blank" rel="noopener noreferrer" class="mobile-nav-item">
       ${ICONS.menu}
       <span>Menu</span>
     </a>
@@ -33,7 +33,10 @@ export function renderFooter(): string {
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <div class="logo-text">${config.brand.name}</div>
+          <div class="logo-text" style="display:flex;align-items:center;gap:0.5rem;">
+            <img src="/assets/images/logo.svg" alt="" width="28" height="28" style="border-radius:50%;">
+            ${config.brand.name}
+          </div>
           <p>${config.brand.tagline}</p>
           <div class="social-links" style="margin-top: 1.5rem;">
             <a href="${config.social.facebook}" target="_blank" rel="noopener noreferrer" aria-label="Facebook">${ICONS.facebook}</a>
