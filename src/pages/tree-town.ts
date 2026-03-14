@@ -6,7 +6,7 @@ import { generateBreadcrumbSchema } from '../utils/seo';
 import { initTracking } from '../components/tracking';
 import { initAnimations } from '../utils/animations';
 import { ICONS } from '../utils/icons';
-import { renderLightbox, initLightbox } from '../utils/lightbox';
+import { initGalleryLightbox } from '../utils/lightbox';
 
 const config = SITE_CONFIG;
 const loc = config.locations[0]; // Tree Town Pattaya
@@ -165,8 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
     </main>
     ${renderFooter()}
 
-    ${renderLightbox('tt-lightbox')}
-
     <script type="application/ld+json">${generateSingleLocationSchema(0)}</script>
     <script type="application/ld+json">${generateBreadcrumbSchema([
       { name: 'Home', url: '/' },
@@ -178,5 +176,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeader();
   initTracking();
   initAnimations();
-  initLightbox('tt-lightbox');
+  initGalleryLightbox('.gallery-grid');
 });

@@ -4,7 +4,7 @@ import { renderFooter } from '../components/footer';
 import { generateBreadcrumbSchema } from '../utils/seo';
 import { initTracking } from '../components/tracking';
 import { initAnimations } from '../utils/animations';
-import { renderLightbox, initLightbox } from '../utils/lightbox';
+import { initGalleryLightbox } from '../utils/lightbox';
 
 const config = SITE_CONFIG;
 
@@ -86,8 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
     </main>
     ${renderFooter()}
 
-    ${renderLightbox('gallery-lightbox')}
-
     <script type="application/ld+json">${JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'ImageGallery',
@@ -103,5 +101,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeader();
   initTracking();
   initAnimations();
-  initLightbox('gallery-lightbox');
+  initGalleryLightbox('#gallery-grid');
 });
