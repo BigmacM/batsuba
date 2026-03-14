@@ -189,7 +189,7 @@ function renderMenuSections(): string {
           const imgUrl = getImageUrl(item.name);
           return `
           <div class="mi-card${isSig ? ' mi-card--sig' : ''}${imgUrl ? ' mi-card--has-img' : ''}" data-name="${item.name.toLowerCase()}">
-            ${imgUrl ? `<div class="mi-card-img" data-src="${imgUrl}"><img src="${imgUrl}" alt="${item.name}" loading="lazy" decoding="async" width="400" height="300"></div>` : ''}
+            ${imgUrl ? `<div class="mi-card-img" data-src="${imgUrl}"><img src="${imgUrl}" alt="${item.name}" loading="lazy" decoding="async" width="400" height="300"></div>` : '<div class="mi-card-img mi-card-placeholder"><img src="/assets/images/logo.svg" alt="" class="mi-placeholder-logo"></div>'}
             <div class="mi-card-body">
               <div class="mi-card-name">${item.name}${isSig ? '<span class="mi-sig-badge">★ Signature</span>' : ''}</div>
               ${item.code ? `<div class="mi-card-code">#${item.code}</div>` : ''}
@@ -213,25 +213,15 @@ function renderMenuSections(): string {
     </div>
     ${renderSection(italianCats)}
 
-    <div class="cta-banner" style="margin: 2rem 0; border-radius: var(--radius-md);">
-      <h2>🔥 2 Hours All-You-Can-Drink</h2>
-      <div style="display:grid; gap:1rem; max-width:36rem; margin:1rem auto 0; text-align:left;">
-        <div style="background:rgba(255,255,255,0.1);border-radius:var(--radius-md);padding:1rem 1.25rem;">
-          <p style="font-weight:700;font-size:1.1rem;margin-bottom:0.5rem;">🍺 Sunday Special — Only 199 THB</p>
-          <ul style="list-style:none;padding:0;margin:0;font-size:0.9rem;opacity:0.9;">
-            <li>• Chang Draft Beer</li>
-            <li>• Thai Whiskey (SangSom)</li>
-            <li>• Shochu</li>
-          </ul>
-          <p style="margin-top:0.5rem;font-size:0.9rem;">🍷 Add 200 THB for Unlimited House Red & White Wine</p>
-        </div>
-        <div style="background:rgba(255,255,255,0.1);border-radius:var(--radius-md);padding:1rem 1.25rem;">
-          <p style="font-weight:700;font-size:1.1rem;">✨ Other Days — 399 THB</p>
-          <p style="font-size:0.9rem;opacity:0.9;">2 Hours All-You-Can-Drink</p>
-          <p style="font-size:0.9rem;opacity:0.9;">🍷 Add 200 THB for unlimited house wine</p>
-        </div>
+    <div class="cta-banner" style="margin: 2rem 0; border-radius: var(--radius-md); text-align:center;">
+      <h2 style="font-size:1.5rem;margin-bottom:0.75rem;">🔥 2-Hour All-You-Can-Drink</h2>
+      <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem;">
+        <span style="background:rgba(255,255,255,0.15);padding:0.4rem 1rem;border-radius:2rem;font-size:0.875rem;font-weight:600;">🍺 Sun: 199 THB</span>
+        <span style="background:rgba(255,255,255,0.15);padding:0.4rem 1rem;border-radius:2rem;font-size:0.875rem;font-weight:600;">✨ Other days: 399 THB</span>
+        <span style="background:rgba(255,255,255,0.15);padding:0.4rem 1rem;border-radius:2rem;font-size:0.875rem;font-weight:600;">🍷 +200 THB for wine</span>
       </div>
-      <a href="${config.social.line}" target="_blank" rel="noopener noreferrer" class="btn btn-accent" style="margin-top: 1.25rem;">Reserve Now</a>
+      <p style="font-size:0.8rem;opacity:0.7;margin-bottom:1rem;">Beer, Whiskey, Shochu included · Add house wine for +200 THB</p>
+      <a href="${config.social.line}" target="_blank" rel="noopener noreferrer" class="btn btn-accent">Reserve Now</a>
     </div>
 
     <div class="menu-cuisine-header animate-fade-up">

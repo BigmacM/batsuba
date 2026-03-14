@@ -1336,6 +1336,24 @@ main {
   transform: scale(1.05);
 }
 
+.mi-card-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-cream) 0%, #f5efe8 100%);
+}
+
+.mi-card-placeholder:hover img {
+  transform: none;
+}
+
+.mi-placeholder-logo {
+  width: 48px !important;
+  height: 48px !important;
+  object-fit: contain !important;
+  opacity: 0.15;
+}
+
 .mi-card-body {
   padding: 0.75rem 1rem;
 }

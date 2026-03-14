@@ -33,7 +33,10 @@ export function renderFooter(): string {
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <div class="logo-text">${config.brand.name}</div>
+          <div class="logo-text" style="display:flex;align-items:center;gap:0.5rem;">
+            <img src="/assets/images/favicon.ico" alt="" width="28" height="28" style="border-radius:3px;">
+            ${config.brand.name}
+          </div>
           <p>${config.brand.tagline}</p>
           <div class="social-links" style="margin-top: 1.5rem;">
             <a href="${config.social.facebook}" target="_blank" rel="noopener noreferrer" aria-label="Facebook">${ICONS.facebook}</a>
