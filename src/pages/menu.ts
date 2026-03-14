@@ -216,9 +216,9 @@ function renderMenuSections(): string {
     <div class="cta-banner" style="margin: 2rem 0; border-radius: var(--radius-md); text-align:center;">
       <h2 style="font-size:1.5rem;margin-bottom:0.75rem;">🔥 2-Hour All-You-Can-Drink</h2>
       <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem;">
-        <span style="background:rgba(255,255,255,0.15);padding:0.4rem 1rem;border-radius:2rem;font-size:0.875rem;font-weight:600;">🍺 Sun: 199 THB</span>
-        <span style="background:rgba(255,255,255,0.15);padding:0.4rem 1rem;border-radius:2rem;font-size:0.875rem;font-weight:600;">✨ Other days: 399 THB</span>
-        <span style="background:rgba(255,255,255,0.15);padding:0.4rem 1rem;border-radius:2rem;font-size:0.875rem;font-weight:600;">🍷 +200 THB for wine</span>
+        <span class="cta-promo-pill cta-promo-pill--highlight">🍺 Sun: 199 THB</span>
+        <span class="cta-promo-pill">✨ Other days: 399 THB</span>
+        <span class="cta-promo-pill">🍷 +200 THB for wine</span>
       </div>
       <p style="font-size:0.8rem;opacity:0.7;margin-bottom:0.75rem;">Beer, Whiskey, Shochu included · Add house wine for +200 THB</p>
       <div style="display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;font-size:0.8rem;opacity:0.8;margin-bottom:1rem;">
