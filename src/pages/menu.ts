@@ -189,7 +189,7 @@ function renderMenuSections(): string {
           const imgUrl = getImageUrl(item.name);
           return `
           <div class="mi-card${isSig ? ' mi-card--sig' : ''}${imgUrl ? ' mi-card--has-img' : ''}" data-name="${item.name.toLowerCase()}">
-            ${imgUrl ? `<div class="mi-card-img" data-src="${imgUrl}"><img src="${imgUrl}" alt="${item.name}" loading="lazy" decoding="async" width="400" height="300"></div>` : '<div class="mi-card-img mi-card-placeholder"><img src="/assets/images/logo.svg" alt="" class="mi-placeholder-logo"></div>'}
+            ${imgUrl ? `<div class="mi-card-img" data-src="${imgUrl}"><img src="${imgUrl}" alt="${item.name}" loading="lazy" decoding="async" width="400" height="300"></div>` : '<div class="mi-card-img mi-card-placeholder"><img src="/assets/images/Batsuba%20Logo%20Icon.webp" alt="" class="mi-placeholder-logo"></div>'}
             <div class="mi-card-body">
               <div class="mi-card-name">${item.name}${isSig ? '<span class="mi-sig-badge">★ Signature</span>' : ''}</div>
               ${item.code ? `<div class="mi-card-code">#${item.code}</div>` : ''}

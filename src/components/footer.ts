@@ -34,7 +34,7 @@ export function renderFooter(): string {
       <div class="footer-grid">
         <div class="footer-brand">
           <div class="logo-text" style="display:flex;align-items:center;gap:0.5rem;">
-            <img src="/assets/images/logo.svg" alt="" width="28" height="28" style="border-radius:50%;">
+            <img src="/assets/images/Batsuba%20Logo%20Icon.webp" alt="" width="28" height="28" style="border-radius:50%; object-fit:cover;">
             ${config.brand.name}
           </div>
           <p>${config.brand.tagline}</p>
