@@ -101,7 +101,7 @@ export function renderHeader(): string {
   <header class="site-header" role="banner">
     <div class="header-inner">
       <a href="/" class="header-logo" aria-label="${config.brand.name} — Home">
-        <img src="/assets/images/Batsuba%20Logo.webp" alt="${config.brand.name}" height="40" style="object-fit: contain;">
+        <img src="/assets/images/Batsuba%20Logo.webp" alt="${config.brand.name}" style="max-height: 40px; width: auto; object-fit: contain; display: block;">
       </a>
       <nav class="nav-links" role="navigation" aria-label="Main navigation">
         <a href="/">Home</a>
