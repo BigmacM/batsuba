@@ -101,7 +101,7 @@ export function renderHeader(): string {
   <header class="site-header" role="banner">
     <div class="header-inner">
       <a href="/" class="header-logo" aria-label="${config.brand.name} — Home">
-        <img src="/assets/images/favicon.ico" alt="" width="36" height="36" style="border-radius: 4px;">
+        <img src="/assets/images/logo.svg" alt="" width="36" height="36" style="border-radius: 50%;">
         <span>BUTSABA</span>
       </a>
       <nav class="nav-links" role="navigation" aria-label="Main navigation">

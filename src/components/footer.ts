@@ -34,7 +34,7 @@ export function renderFooter(): string {
       <div class="footer-grid">
         <div class="footer-brand">
           <div class="logo-text" style="display:flex;align-items:center;gap:0.5rem;">
-            <img src="/assets/images/favicon.ico" alt="" width="28" height="28" style="border-radius:3px;">
+            <img src="/assets/images/logo.svg" alt="" width="28" height="28" style="border-radius:50%;">
             ${config.brand.name}
           </div>
           <p>${config.brand.tagline}</p>

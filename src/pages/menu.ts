@@ -220,7 +220,11 @@ function renderMenuSections(): string {
         <span style="background:rgba(255,255,255,0.15);padding:0.4rem 1rem;border-radius:2rem;font-size:0.875rem;font-weight:600;">✨ Other days: 399 THB</span>
         <span style="background:rgba(255,255,255,0.15);padding:0.4rem 1rem;border-radius:2rem;font-size:0.875rem;font-weight:600;">🍷 +200 THB for wine</span>
       </div>
-      <p style="font-size:0.8rem;opacity:0.7;margin-bottom:1rem;">Beer, Whiskey, Shochu included · Add house wine for +200 THB</p>
+      <p style="font-size:0.8rem;opacity:0.7;margin-bottom:0.75rem;">Beer, Whiskey, Shochu included · Add house wine for +200 THB</p>
+      <div style="display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;font-size:0.8rem;opacity:0.8;margin-bottom:1rem;">
+        <span>📍 Branch 1 (Tree Town) — 🗓 Every Sunday</span>
+        <span>📍 Branch 2 (Aya Hotel) — 🗓 Every Wednesday</span>
+      </div>
       <a href="${config.social.line}" target="_blank" rel="noopener noreferrer" class="btn btn-accent">Reserve Now</a>
     </div>
 
