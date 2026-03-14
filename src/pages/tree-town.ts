@@ -64,10 +64,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 Our original location at Tree Town Pattaya is where the BUTSABA story began. Nestled in the vibrant Tree Town complex, this location offers an intimate dining experience with our full menu of Italian, Thai, and Japanese fusion cuisine paired with an extensive wine collection of over 200 labels.
               </p>
               <p style="line-height: 1.8; color: var(--color-text-muted); margin-top: var(--space-2);">
-                The warm, sophisticated ambiance makes it perfect for romantic dinners, business meetings, or celebrations with friends. Enjoy our signature All You Can Drink package at ${config.promotions.allYouCanDrink.price} THB for ${config.promotions.allYouCanDrink.duration}.
+                The warm, sophisticated ambiance makes it perfect for romantic dinners, business meetings, or celebrations with friends.
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      <!-- All You Can Drink Promo -->
+      <section class="cta-banner" aria-label="All You Can Drink Promotion">
+        <div class="container animate-fade-up">
+          <h2>🔥 2 Hours All-You-Can-Drink</h2>
+          <div style="display:grid; gap:1rem; max-width:36rem; margin:1rem auto 0; text-align:left;">
+            <div style="background:rgba(255,255,255,0.15);border-radius:var(--radius-md);padding:1rem 1.25rem;">
+              <p style="font-weight:700;font-size:1.1rem;margin-bottom:0.5rem;">🍺 Every Sunday — Only 199 THB</p>
+              <ul style="list-style:none;padding:0;margin:0;font-size:0.9rem;opacity:0.9;">
+                <li>• Chang Draft Beer</li>
+                <li>• Thai Whiskey (SangSom)</li>
+                <li>• Shochu</li>
+              </ul>
+              <p style="margin-top:0.5rem;font-size:0.9rem;">🍷 Add 200 THB for Unlimited House Red & White Wine</p>
+            </div>
+            <div style="background:rgba(255,255,255,0.15);border-radius:var(--radius-md);padding:1rem 1.25rem;">
+              <p style="font-weight:700;font-size:1.1rem;">✨ Other Days — 399 THB</p>
+              <p style="font-size:0.9rem;opacity:0.9;">2 Hours All-You-Can-Drink</p>
+              <p style="font-size:0.9rem;opacity:0.9;">🍷 Add 200 THB for unlimited house wine</p>
+            </div>
+          </div>
+          <a href="${config.social.line}" target="_blank" rel="noopener noreferrer" class="btn btn-accent" style="margin-top: 1.25rem;">Reserve Now</a>
         </div>
       </section>
 

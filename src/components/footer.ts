@@ -13,7 +13,7 @@ export function renderFooter(): string {
       ${ICONS.home}
       <span>Home</span>
     </a>
-    <a href="/menu.html" class="mobile-nav-item">
+    <a href="/images/menu-pages/menu%20butsaba.pdf" target="_blank" rel="noopener noreferrer" class="mobile-nav-item">
       ${ICONS.menu}
       <span>Menu</span>
     </a>

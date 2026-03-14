@@ -97,10 +97,24 @@ document.addEventListener('DOMContentLoaded', () => {
       <!-- All You Can Drink Banner -->
       <section class="cta-banner" aria-label="All You Can Drink Promotion">
         <div class="container animate-fade-up">
-          <h2>All You Can Drink</h2>
-          <p>${config.promotions.allYouCanDrink.price} THB / ${config.promotions.allYouCanDrink.duration}</p>
-          <p style="font-size: 0.9375rem;">${config.promotions.allYouCanDrink.availability}</p>
-          <a href="${config.social.line}" target="_blank" rel="noopener noreferrer" class="btn btn-accent" style="margin-top: 1rem;">Reserve Now</a>
+          <h2>🔥 2 Hours All-You-Can-Drink</h2>
+          <div style="display:grid; gap:1rem; max-width:36rem; margin:1rem auto 0; text-align:left;">
+            <div style="background:rgba(255,255,255,0.1);border-radius:var(--radius-md);padding:1rem 1.25rem;">
+              <p style="font-weight:700;font-size:1.1rem;margin-bottom:0.5rem;">🍺 Sunday Special — Only 199 THB</p>
+              <ul style="list-style:none;padding:0;margin:0;font-size:0.9rem;opacity:0.9;">
+                <li>• Chang Draft Beer</li>
+                <li>• Thai Whiskey (SangSom)</li>
+                <li>• Shochu</li>
+              </ul>
+              <p style="margin-top:0.5rem;font-size:0.9rem;">🍷 Add 200 THB for Unlimited House Red & White Wine</p>
+            </div>
+            <div style="background:rgba(255,255,255,0.1);border-radius:var(--radius-md);padding:1rem 1.25rem;">
+              <p style="font-weight:700;font-size:1.1rem;">✨ Other Days — 399 THB</p>
+              <p style="font-size:0.9rem;opacity:0.9;">2 Hours All-You-Can-Drink</p>
+              <p style="font-size:0.9rem;opacity:0.9;">🍷 Add 200 THB for unlimited house wine</p>
+            </div>
+          </div>
+          <a href="${config.social.line}" target="_blank" rel="noopener noreferrer" class="btn btn-accent" style="margin-top: 1.25rem;">Reserve Now</a>
         </div>
       </section>
 
