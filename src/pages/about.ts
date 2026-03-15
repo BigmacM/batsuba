@@ -1,8 +1,8 @@
 import { SITE_CONFIG } from '../utils/config';
 import { renderHeader, initHeader } from '../components/header';
 import { renderFooter } from '../components/footer';
-import { generateRestaurantSchema } from '../components/schema';
-import { generateBreadcrumbSchema } from '../utils/seo';
+import { generateRestaurantSchema, generateOrganizationSchema } from '../components/schema';
+import { generateBreadcrumbSchema, renderBreadcrumbs } from '../utils/seo';
 import { initTracking } from '../components/tracking';
 import { initAnimations } from '../utils/animations';
 
@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <p>A passion for fine wine and authentic cuisine in the heart of Pattaya</p>
         </div>
       </section>
+      ${renderBreadcrumbs([{ name: 'Home', url: '/' }, { name: 'About Us', url: '/about.html' }])}
 
       <!-- Story -->
       <section class="section" aria-labelledby="story-heading">
@@ -135,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ${renderFooter()}
 
     <script type="application/ld+json">${generateRestaurantSchema()}</script>
+    <script type="application/ld+json">${generateOrganizationSchema()}</script>
     <script type="application/ld+json">${generateBreadcrumbSchema([
       { name: 'Home', url: '/' },
       { name: 'About', url: '/about.html' },

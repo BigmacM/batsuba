@@ -20,7 +20,7 @@ export function renderFooter(): string {
     <a href="tel:${loc1.phone}" class="mobile-nav-item mobile-nav-call" aria-label="Call us">
       ${ICONS.phone}
     </a>
-    <a href="${config.social.line}" target="_blank" rel="noopener noreferrer" class="mobile-nav-item">
+    <a href="/contact.html" class="mobile-nav-item">
       ${ICONS.line}
       <span>Reserve</span>
     </a>
@@ -34,8 +34,8 @@ export function renderFooter(): string {
       <div class="footer-grid">
         <div class="footer-brand">
           <div class="logo-text" style="display:flex;align-items:center;gap:0.5rem;">
-            <img src="/assets/images/Batsuba%20Logo%20Icon.webp" alt="" width="28" height="28" style="border-radius:50%; object-fit:cover;">
-            ${config.brand.name}
+            <img src="/assets/images/Batsuba_Logo_transparent.png" alt="" width="28" height="28" style="object-fit:contain;">
+            Butsaba
           </div>
           <p>${config.brand.tagline}</p>
           <div class="social-links" style="margin-top: 1.5rem;">

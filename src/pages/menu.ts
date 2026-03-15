@@ -3,7 +3,7 @@ import { MENU_CATEGORIES } from '../utils/menu';
 import { renderHeader, initHeader } from '../components/header';
 import { renderFooter } from '../components/footer';
 import { generateMenuSchema, generateRestaurantSchema } from '../components/schema';
-import { generateBreadcrumbSchema } from '../utils/seo';
+import { generateBreadcrumbSchema, renderBreadcrumbs } from '../utils/seo';
 import { initTracking } from '../components/tracking';
 import { initAnimations, initDragScroll } from '../utils/animations';
 import { openLightbox } from '../utils/lightbox';
@@ -254,6 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </a>
         </div>
       </section>
+      ${renderBreadcrumbs([{ name: 'Home', url: '/' }, { name: 'Menu', url: '/menu.html' }])}
 
       <nav class="category-nav" aria-label="Menu categories">
         <div class="category-nav-inner">

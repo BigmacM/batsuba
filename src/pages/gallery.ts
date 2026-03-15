@@ -1,7 +1,8 @@
 import { SITE_CONFIG } from '../utils/config';
 import { renderHeader, initHeader } from '../components/header';
 import { renderFooter } from '../components/footer';
-import { generateBreadcrumbSchema } from '../utils/seo';
+import { generateImageGallerySchema } from '../components/schema';
+import { generateBreadcrumbSchema, renderBreadcrumbs } from '../utils/seo';
 import { initTracking } from '../components/tracking';
 import { initAnimations } from '../utils/animations';
 import { initGalleryLightbox } from '../utils/lightbox';
@@ -51,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <p>Glimpses of our food, wine, and atmosphere</p>
         </div>
       </section>
+      ${renderBreadcrumbs([{ name: 'Home', url: '/' }, { name: 'Gallery', url: '/gallery.html' }])}
 
       <section class="section" aria-labelledby="gallery-heading">
         <div class="container">
@@ -86,12 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
     </main>
     ${renderFooter()}
 
-    <script type="application/ld+json">${JSON.stringify({
-      '@context': 'https://schema.org',
-      '@type': 'ImageGallery',
-      name: `${config.brand.name} Gallery`,
-      url: `${config.seo.siteUrl}/gallery.html`,
-    })}</script>
+    <script type="application/ld+json">${generateImageGallerySchema()}</script>
     <script type="application/ld+json">${generateBreadcrumbSchema([
       { name: 'Home', url: '/' },
       { name: 'Gallery', url: '/gallery.html' },

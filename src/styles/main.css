@@ -51,6 +51,38 @@
   --transition: 0.3s ease;
 }
 
+/* ── Breadcrumbs ───────────────────────────────────────────── */
+.breadcrumbs {
+  background: var(--color-cream);
+  padding: 0.625rem 0;
+  font-size: 0.8125rem;
+  font-family: var(--font-body);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.breadcrumbs .container {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+.breadcrumb-link {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+.breadcrumb-link:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+.breadcrumb-sep {
+  margin: 0 0.375rem;
+  color: var(--color-gray-mid);
+  font-size: 0.75rem;
+}
+.breadcrumb-current {
+  color: var(--color-text-muted);
+}
+
 /* ── Reset & Base ───────────────────────────────────────────── */
 *,
 *::before,
