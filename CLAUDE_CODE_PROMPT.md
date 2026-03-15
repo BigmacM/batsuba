@@ -246,7 +246,7 @@ Generate with all 6 pages. Priority: home=1.0, menu=0.9, others=0.8. Changefreq:
 ```
 User-agent: *
 Allow: /
-Sitemap: https://www.butsaba-winecafe.com/sitemap.xml
+Sitemap: https://batsuba.com/sitemap.xml
 ```
 
 ---
