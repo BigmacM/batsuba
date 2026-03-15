@@ -104,7 +104,7 @@ export const SITE_CONFIG = {
   // ── SEO DEFAULTS ───────────────────────────────────────────
   seo: {
     siteName: "BUTSABA Wine & Cafe",
-    siteUrl: "https://www.butsaba-winecafe.com",  // update with real domain
+    siteUrl: "https://batsuba.com",  // update with real domain
     defaultTitle: "BUTSABA Wine & Cafe — Fine Dining & Wine Bar in Pattaya",
     titleTemplate: "%s | BUTSABA Wine & Cafe — Pattaya",
     defaultDescription:

@@ -3,7 +3,7 @@ Allow: /
 Disallow: /assets/images/favicon.ico
 
 # Sitemaps
-Sitemap: https://www.butsaba-winecafe.com/sitemap.xml
+Sitemap: https://batsuba.com/sitemap.xml
 
 # Crawl-delay (optional, for polite bots)
 Crawl-delay: 1
