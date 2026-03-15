@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <a href="/about.html" class="btn btn-primary" style="margin-top: 1rem;">Our Story</a>
             </div>
             <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+              <img src="/images/about/Batsuba%20Girls%20Main.webp" alt="Batsuba team" loading="lazy" decoding="async" width="600" height="400" style="width: 100%; border-radius: var(--radius-md); object-fit: cover;">
               <div class="stats-strip" style="padding: 0; justify-content: flex-start;">
                 <div class="stat-item">
                   <div class="stat-value">200+</div>

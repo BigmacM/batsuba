@@ -74,6 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
               <h3 style="color: var(--color-primary); margin-bottom: var(--space-2);">Reserve via LINE</h3>
               <p style="color: var(--color-text-muted); margin-bottom: var(--space-4); max-width: 24rem;">Message us directly on LINE to make a reservation, ask about our menu, or plan your next visit. We'll reply promptly!</p>
+              <img src="/assets/images/Batsuba%20Line%20QR%20Code.webp" alt="Scan to add us on LINE" width="160" height="160" style="border-radius: var(--radius-md); margin-bottom: var(--space-3);" loading="lazy">
+              <p style="color: var(--color-text-muted); font-size: 0.875rem; margin-bottom: var(--space-3);">Scan the QR code or tap below</p>
               <a href="${config.social.line}" target="_blank" rel="noopener noreferrer" class="btn btn-accent" style="font-size: 1.125rem; padding: 0.875rem 2.5rem; gap: 0.5rem; background: #06C755; border-color: #06C755;">
                 ${ICONS.line} Chat on LINE
               </a>
