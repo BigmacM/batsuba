@@ -1,8 +1,8 @@
 import { SITE_CONFIG } from '../utils/config';
 import { renderHeader, initHeader } from '../components/header';
 import { renderFooter } from '../components/footer';
-import { generateRestaurantSchema } from '../components/schema';
-import { generateBreadcrumbSchema } from '../utils/seo';
+import { generateRestaurantSchema, generateOrganizationSchema } from '../components/schema';
+import { generateBreadcrumbSchema, renderBreadcrumbs } from '../utils/seo';
 import { initTracking } from '../components/tracking';
 import { initAnimations } from '../utils/animations';
 
@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   app.innerHTML = `
     ${renderHeader()}
     <main id="main">
+      ${renderBreadcrumbs([{ name: 'Home', url: '/' }, { name: 'About Us', url: '/about.html' }])}
       <!-- Hero -->
       <section class="hero hero-page" aria-label="About Us">
         <div class="hero-overlay"></div>
@@ -135,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ${renderFooter()}
 
     <script type="application/ld+json">${generateRestaurantSchema()}</script>
+    <script type="application/ld+json">${generateOrganizationSchema()}</script>
     <script type="application/ld+json">${generateBreadcrumbSchema([
       { name: 'Home', url: '/' },
       { name: 'About', url: '/about.html' },

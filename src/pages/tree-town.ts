@@ -2,7 +2,7 @@ import { SITE_CONFIG } from '../utils/config';
 import { renderHeader, initHeader } from '../components/header';
 import { renderFooter } from '../components/footer';
 import { generateSingleLocationSchema } from '../components/schema';
-import { generateBreadcrumbSchema } from '../utils/seo';
+import { generateBreadcrumbSchema, renderBreadcrumbs } from '../utils/seo';
 import { initTracking } from '../components/tracking';
 import { initAnimations } from '../utils/animations';
 import { ICONS } from '../utils/icons';
@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   app.innerHTML = `
     ${renderHeader()}
     <main id="main">
+      ${renderBreadcrumbs([{ name: 'Home', url: '/' }, { name: 'Locations', url: '/locations.html' }, { name: 'Tree Town', url: '/tree-town.html' }])}
       <!-- Hero -->
       <section class="hero hero-page hero-page-img" aria-label="${loc.label}" style="background-image: url('/images/locations/${'Batsuba%20Tree%20Town'}/${'Batsuba%20Main.jpg'}');">
         <div class="hero-overlay"></div>

@@ -3,7 +3,7 @@ import { MENU_CATEGORIES } from '../utils/menu';
 import { renderHeader, initHeader } from '../components/header';
 import { renderFooter } from '../components/footer';
 import { generateMenuSchema, generateRestaurantSchema } from '../components/schema';
-import { generateBreadcrumbSchema } from '../utils/seo';
+import { generateBreadcrumbSchema, renderBreadcrumbs } from '../utils/seo';
 import { initTracking } from '../components/tracking';
 import { initAnimations, initDragScroll } from '../utils/animations';
 import { openLightbox } from '../utils/lightbox';
@@ -244,6 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
   app.innerHTML = `
     ${renderHeader()}
     <main id="main">
+      ${renderBreadcrumbs([{ name: 'Home', url: '/' }, { name: 'Menu', url: '/menu.html' }])}
       <section class="hero hero-page" aria-label="Our Menu">
         <div class="hero-overlay"></div>
         <div class="hero-content">

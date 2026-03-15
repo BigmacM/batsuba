@@ -43,3 +43,15 @@ export function generateBreadcrumbSchema(items: { name: string; url: string }[])
   };
   return JSON.stringify(schema);
 }
+
+export function renderBreadcrumbs(items: { name: string; url: string }[]): string {
+  if (items.length <= 1) return '';
+  const crumbs = items.map((item, i) => {
+    if (i === items.length - 1) {
+      return `<span class="breadcrumb-current" aria-current="page">${item.name}</span>`;
+    }
+    return `<a href="${item.url}" class="breadcrumb-link">${item.name}</a>`;
+  }).join('<span class="breadcrumb-sep" aria-hidden="true">/</span>');
+
+  return `<nav class="breadcrumbs" aria-label="Breadcrumb"><div class="container">${crumbs}</div></nav>`;
+}

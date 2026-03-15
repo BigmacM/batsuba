@@ -1,3 +1,9 @@
 User-agent: *
 Allow: /
+Disallow: /assets/images/favicon.ico
+
+# Sitemaps
 Sitemap: https://www.butsaba-winecafe.com/sitemap.xml
+
+# Crawl-delay (optional, for polite bots)
+Crawl-delay: 1

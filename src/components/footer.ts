@@ -35,7 +35,7 @@ export function renderFooter(): string {
         <div class="footer-brand">
           <div class="logo-text" style="display:flex;align-items:center;gap:0.5rem;">
             <img src="/assets/images/Batsuba_Logo_transparent.png" alt="" width="28" height="28" style="object-fit:contain;">
-            Batsuba
+            Butsaba
           </div>
           <p>${config.brand.tagline}</p>
           <div class="social-links" style="margin-top: 1.5rem;">
