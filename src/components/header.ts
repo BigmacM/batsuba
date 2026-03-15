@@ -101,8 +101,8 @@ export function renderHeader(): string {
   <header class="site-header" role="banner">
     <div class="header-inner">
       <a href="/" class="header-logo" aria-label="${config.brand.name} — Home" style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none;">
-        <img src="/assets/images/Batsuba_Logo_transparent.png" alt="${config.brand.name}" style="max-height: 40px; width: auto; object-fit: contain; display: block;">
-        <span style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: var(--color-primary); letter-spacing: 0.05em;">Batsuba</span>
+        <img src="/assets/images/Batsuba_Logo_transparent.png" alt="${config.brand.name}" style="max-height: 55px; width: auto; object-fit: contain; display: block;">
+        <span style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 700; color: var(--color-accent); letter-spacing: 0.05em;">Batsuba</span>
       </a>
       <nav class="nav-links" role="navigation" aria-label="Main navigation">
         <a href="/">Home</a>
