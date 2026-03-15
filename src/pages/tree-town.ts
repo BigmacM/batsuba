@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
   app.innerHTML = `
     ${renderHeader()}
     <main id="main">
-      ${renderBreadcrumbs([{ name: 'Home', url: '/' }, { name: 'Locations', url: '/locations.html' }, { name: 'Tree Town', url: '/tree-town.html' }])}
       <!-- Hero -->
       <section class="hero hero-page hero-page-img" aria-label="${loc.label}" style="background-image: url('/images/locations/${'Batsuba%20Tree%20Town'}/${'Batsuba%20Main.jpg'}');">
         <div class="hero-overlay"></div>
@@ -27,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <p>Italian &middot; Thai &middot; Japanese Fusion in Tree Town Pattaya</p>
         </div>
       </section>
+      ${renderBreadcrumbs([{ name: 'Home', url: '/' }, { name: 'Locations', url: '/locations.html' }, { name: 'Tree Town', url: '/tree-town.html' }])}
 
       <!-- Location Details -->
       <section class="section" aria-labelledby="loc-details-heading">

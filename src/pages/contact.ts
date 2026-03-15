@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', () => {
   app.innerHTML = `
     ${renderHeader()}
     <main id="main">
-      ${renderBreadcrumbs([{ name: 'Home', url: '/' }, { name: 'Contact', url: '/contact.html' }])}
       <!-- Hero -->
       <section class="hero hero-page" aria-label="Contact Us">
         <div class="hero-overlay"></div>
@@ -24,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <p>We would love to hear from you</p>
         </div>
       </section>
+      ${renderBreadcrumbs([{ name: 'Home', url: '/' }, { name: 'Contact', url: '/contact.html' }])}
 
       <!-- Contact Grid -->
       <section class="section" id="reservation" aria-labelledby="contact-heading">

@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
   app.innerHTML = `
     ${renderHeader()}
     <main id="main">
-      ${renderBreadcrumbs([{ name: 'Home', url: '/' }, { name: 'Locations', url: '/locations.html' }, { name: 'Aya Hotel', url: '/aya-hotel.html' }])}
       <!-- Hero -->
       <section class="hero hero-page hero-page-img" aria-label="${loc.label}" style="background-image: url('/images/locations/${'Batsuba%20Aya%20Hotel'}/${'Batsuba%202%20Main.jpg'}');">
         <div class="hero-overlay"></div>
@@ -27,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <p>Italian &middot; Thai &middot; Japanese Fusion near Aya Boutique Hotel</p>
         </div>
       </section>
+      ${renderBreadcrumbs([{ name: 'Home', url: '/' }, { name: 'Locations', url: '/locations.html' }, { name: 'Aya Hotel', url: '/aya-hotel.html' }])}
 
       <!-- Location Details -->
       <section class="section" aria-labelledby="loc-details-heading">

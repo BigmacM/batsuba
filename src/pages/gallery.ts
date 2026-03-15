@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
   app.innerHTML = `
     ${renderHeader()}
     <main id="main">
-      ${renderBreadcrumbs([{ name: 'Home', url: '/' }, { name: 'Gallery', url: '/gallery.html' }])}
       <!-- Hero -->
       <section class="hero hero-page" aria-label="Gallery">
         <div class="hero-overlay"></div>
@@ -53,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <p>Glimpses of our food, wine, and atmosphere</p>
         </div>
       </section>
+      ${renderBreadcrumbs([{ name: 'Home', url: '/' }, { name: 'Gallery', url: '/gallery.html' }])}
 
       <section class="section" aria-labelledby="gallery-heading">
         <div class="container">

@@ -244,7 +244,6 @@ document.addEventListener('DOMContentLoaded', () => {
   app.innerHTML = `
     ${renderHeader()}
     <main id="main">
-      ${renderBreadcrumbs([{ name: 'Home', url: '/' }, { name: 'Menu', url: '/menu.html' }])}
       <section class="hero hero-page" aria-label="Our Menu">
         <div class="hero-overlay"></div>
         <div class="hero-content">
@@ -255,6 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </a>
         </div>
       </section>
+      ${renderBreadcrumbs([{ name: 'Home', url: '/' }, { name: 'Menu', url: '/menu.html' }])}
 
       <nav class="category-nav" aria-label="Menu categories">
         <div class="category-nav-inner">

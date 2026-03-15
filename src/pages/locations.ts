@@ -39,7 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
   app.innerHTML = `
     ${renderHeader()}
     <main id="main">
-      ${renderBreadcrumbs([{ name: 'Home', url: '/' }, { name: 'Locations', url: '/locations.html' }])}
       <!-- Hero -->
       <section class="hero hero-page" aria-label="Our Locations">
         <div class="hero-overlay"></div>
@@ -48,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <p>Two locations, one exceptional dining experience</p>
         </div>
       </section>
+      ${renderBreadcrumbs([{ name: 'Home', url: '/' }, { name: 'Locations', url: '/locations.html' }])}
 
       <!-- Location Cards -->
       <section class="section" aria-labelledby="locations-heading">
