@@ -95,7 +95,7 @@ export const SITE_CONFIG = {
   // ── TRACKING & ANALYTICS ───────────────────────────────────
   // ⚠️  FILL IN YOUR REAL IDs BEFORE DEPLOYING
   tracking: {
-    googleTagManagerId: "GTM-NJWTC9PF",
+    googleTagManagerId: "GTM-M77MWLXR",
     googleAnalyticsId: "G-XXXXXXXXXX",        // e.g. G-ABC123DEF4
     metaPixelId: "XXXXXXXXXXXXXXXX",           // e.g. 1234567890123456
     googleSiteVerification: "",                // from Google Search Console
@@ -104,7 +104,7 @@ export const SITE_CONFIG = {
   // ── SEO DEFAULTS ───────────────────────────────────────────
   seo: {
     siteName: "BUTSABA Wine & Cafe",
-    siteUrl: "https://batsuba.com",  // update with real domain
+    siteUrl: "https://butsabawinecafe.com",  // update with real domain
     defaultTitle: "BUTSABA Wine & Cafe — Fine Dining & Wine Bar in Pattaya",
     titleTemplate: "%s | BUTSABA Wine & Cafe — Pattaya",
     defaultDescription:
